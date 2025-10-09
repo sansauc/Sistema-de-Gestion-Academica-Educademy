@@ -1,5 +1,6 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -21,7 +22,7 @@ public class Curso {
     private String divisionCurso;
 
     @ManyToMany(mappedBy = "cursos")
-    private List<Materia> materias;
+    private List<Materia> materias = new ArrayList<>();
 
     public Curso(){}
 
@@ -72,4 +73,6 @@ public class Curso {
         materia.getCursos().add(this);
     }
 
+
+    
 }

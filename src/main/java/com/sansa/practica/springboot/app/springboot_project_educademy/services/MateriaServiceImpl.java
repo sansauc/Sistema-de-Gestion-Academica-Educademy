@@ -10,12 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.MateriaRepository;
+import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.ProfesorRepository;
 
 @Service
 public class MateriaServiceImpl implements MateriaService {
 
     @Autowired
     private MateriaRepository repository;
+
+    @Autowired
+    private ProfesorRepository repository2;
 
     @Transactional(readOnly = true)
     @Override
@@ -52,7 +56,14 @@ public class MateriaServiceImpl implements MateriaService {
         Optional<Materia> materOptional = repository.findById(idMateria);
         if(materOptional.isPresent()){
             Materia materiaBd = materOptional.get();
-            materiaBd.agregarProfesor(profesor);
+
+            //Recuperar al profesor
+            Optional<Profesor> profOptional = repository2.findByProfesorId(profesor.getProfesorId());
+            if(profOptional.isEmpty()){
+                return Optional.empty();
+            }
+
+            materiaBd.agregarProfesor(profOptional.get());
             return Optional.of(repository.save(materiaBd));
         }
         return materOptional;
@@ -63,7 +74,14 @@ public class MateriaServiceImpl implements MateriaService {
         Optional<Materia> materOptional = repository.findById(idMateria);
         if(materOptional.isPresent()){
             Materia materiaBd = materOptional.get();
-            materiaBd.quitarProfesor(profesor);;
+
+            //Recuperar al profesor
+            Optional<Profesor> profOptional = repository2.findByProfesorId(profesor.getProfesorId());
+            if(profOptional.isEmpty()){
+                return Optional.empty();
+            }
+
+            materiaBd.quitarProfesor(profOptional.get());
             return Optional.of(repository.save(materiaBd));
         }
         return materOptional;

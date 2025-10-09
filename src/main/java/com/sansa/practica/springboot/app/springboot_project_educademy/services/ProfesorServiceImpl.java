@@ -65,6 +65,7 @@ public class ProfesorServiceImpl implements ProfesorService{
 
     //Para usar estos ultimos 2 metodos la materia debe existir
     @Override
+    @Transactional
     public Optional<Profesor> agregarMateria(Long id, Materia materia) {
       Optional<Profesor> profOptional = repository.findById(id);
       if(profOptional.isPresent()){
@@ -76,6 +77,7 @@ public class ProfesorServiceImpl implements ProfesorService{
     }
 
     @Override
+    @Transactional
     public Optional<Profesor> quitarMateria(Long id, Materia materia) {
        Optional<Profesor> profOptional = repository.findById(id);
       if(profOptional.isPresent()){
@@ -84,6 +86,6 @@ public class ProfesorServiceImpl implements ProfesorService{
         return Optional.of(repository.save(profBd));
       }
       return profOptional;
-
+    }
 
 }

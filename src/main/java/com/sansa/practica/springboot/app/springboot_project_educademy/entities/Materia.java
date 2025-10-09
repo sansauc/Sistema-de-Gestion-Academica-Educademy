@@ -3,6 +3,8 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +27,7 @@ public class Materia {
     @JoinTable(name = "materia_curso", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "curso_id"))
     private List<Curso> cursos = new ArrayList<>();; // Para saber a que curso pertenece la materia
 
+    @JsonIgnoreProperties({"materiasDictadas", "handler", "hibernateLazyInitializer"})//Con esto se soluciona la recursión infinita en el JSON
     @ManyToMany
     @JoinTable(name = "materia_profesor", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "profesor_id"))
     private List<Profesor> profesores = new ArrayList<>();

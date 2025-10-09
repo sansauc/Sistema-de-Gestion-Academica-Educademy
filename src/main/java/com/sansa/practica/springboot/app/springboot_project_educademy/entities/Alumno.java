@@ -80,4 +80,41 @@ public class Alumno extends Persona {
         this.materiasCursadas.remove(materia);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((studentId == null) ? 0 : studentId.hashCode());
+        result = prime * result + ((fechaInscripcion == null) ? 0 : fechaInscripcion.hashCode());
+        result = prime * result + ((cursoActual == null) ? 0 : cursoActual.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Alumno other = (Alumno) obj;
+        if (studentId == null) {
+            if (other.studentId != null)
+                return false;
+        } else if (!studentId.equals(other.studentId))
+            return false;
+        if (fechaInscripcion == null) {
+            if (other.fechaInscripcion != null)
+                return false;
+        } else if (!fechaInscripcion.equals(other.fechaInscripcion))
+            return false;
+        if (cursoActual == null) {
+            if (other.cursoActual != null)
+                return false;
+        } else if (!cursoActual.equals(other.cursoActual))
+            return false;
+        return true;
+    }
+    
 }
