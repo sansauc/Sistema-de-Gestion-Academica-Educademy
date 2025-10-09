@@ -22,9 +22,7 @@ public class Materia {
     private String nombre;
 
     @ManyToMany
-    @JoinTable(name = "materia_curso", 
-    joinColumns = @JoinColumn(name = "materia_id"), 
-    inverseJoinColumns = @JoinColumn(name = "curso_id"))
+    @JoinTable(name = "materia_curso", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "curso_id"))
     private List<Curso> cursos = new ArrayList<>();; // Para saber a que curso pertenece la materia
 
     @ManyToMany
@@ -80,7 +78,12 @@ public class Materia {
         profesor.getMateriasDictadas().add(this);
     }
 
-    public void agregarCurso(Curso curso){
+    public void quitarProfesor(Profesor profesor) {
+        profesores.remove(profesor);
+        profesor.getMateriasDictadas().remove(this);
+    }
+
+    public void agregarCurso(Curso curso) {
         this.cursos.add(curso);
         curso.getMaterias().add(this);
     }

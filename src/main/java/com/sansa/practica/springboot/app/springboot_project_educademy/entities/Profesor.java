@@ -11,28 +11,32 @@ import jakarta.persistence.Table;
 @Table(name = "profesores")
 public class Profesor extends Persona {
 
-    private String studentId;
+    private String profesorId;
+
+    private Date fechaIngreso;
+
 
     @ManyToMany(mappedBy = "profesores")
     private List<Materia> materiasDictadas;
 
-    public Profesor(String name, String lastname, String email, Date birthdate, String studentId) {
+    public Profesor(String name, String lastname, String email, Date birthdate, String profesorId, Date fechaIngreso) {
         super(name, lastname, email, birthdate);
-        this.studentId = studentId;
+        this.profesorId = profesorId;
+        this.fechaIngreso = fechaIngreso;
     }
 
-    public Profesor(String studentId, List<Materia> materiasDictadas) {
-        this.studentId = studentId;
+    public Profesor(String profesorId, List<Materia> materiasDictadas) {
+        this.profesorId = profesorId;
         this.materiasDictadas = materiasDictadas;
     }
 
     // Getters && Setters
-    public String getStudentId() {
-        return studentId;
+    public String getProfesorId() {
+        return profesorId;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setProfesorId(String profesorId) {
+        this.profesorId = profesorId;
     }
 
     public List<Materia> getMateriasDictadas() {
@@ -43,10 +47,24 @@ public class Profesor extends Persona {
         this.materiasDictadas = materiasDictadas;
     }
 
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+    
     // Métodos de Clase
     public void agregarMateria(Materia materia) {
         materiasDictadas.add(materia);
         materia.getProfesores().add(this);
     }
+
+    public void quitarMateria(Materia materia) {
+        materiasDictadas.remove(materia);
+        materia.getProfesores().remove(this);
+    }
+
 
 }

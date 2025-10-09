@@ -44,7 +44,7 @@ public class AlumnoServiceImpl implements AlumnoService {
         return alumOptional; // el metodo podria ser void, pero para saber si se borro devolvemos esto,
                              // status 404 (si se borro) o 201 (si salio bien)
     }
-
+   
     @Override
     @Transactional
     public Optional<Alumno> update(Long id, Alumno alumno) {

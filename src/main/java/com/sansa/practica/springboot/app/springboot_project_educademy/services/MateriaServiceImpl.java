@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.MateriaRepository;
 
 @Service
@@ -42,6 +43,30 @@ public class MateriaServiceImpl implements MateriaService {
             repository.delete(materiaDb);
         });
         return materiaOptional;
+    }
+
+    //Para usar estos ultimos 2 metodos el profesor debe existir
+    @Override
+    @Transactional
+    public Optional<Materia> agregarProfesor(Long idMateria, Profesor profesor) {
+        Optional<Materia> materOptional = repository.findById(idMateria);
+        if(materOptional.isPresent()){
+            Materia materiaBd = materOptional.get();
+            materiaBd.agregarProfesor(profesor);
+            return Optional.of(repository.save(materiaBd));
+        }
+        return materOptional;
+    }
+
+    @Override
+    public Optional<Materia> quitarProfesor(Long idMateria, Profesor profesor) {
+        Optional<Materia> materOptional = repository.findById(idMateria);
+        if(materOptional.isPresent()){
+            Materia materiaBd = materOptional.get();
+            materiaBd.quitarProfesor(profesor);;
+            return Optional.of(repository.save(materiaBd));
+        }
+        return materOptional;
     }
 
 }

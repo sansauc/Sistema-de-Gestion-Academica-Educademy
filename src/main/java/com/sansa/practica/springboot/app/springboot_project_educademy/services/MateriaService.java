@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 
 
 public interface MateriaService {
@@ -13,5 +14,7 @@ public interface MateriaService {
     Materia save(Materia materia);
     //Optional<Materia> update(Long id, Materia materia);
     Optional<Materia> delete(Long id);
+    Optional<Materia> agregarProfesor(Long idMateria, Profesor profesor);
+    Optional<Materia> quitarProfesor(Long idMateria, Profesor profesor);
 
 }
