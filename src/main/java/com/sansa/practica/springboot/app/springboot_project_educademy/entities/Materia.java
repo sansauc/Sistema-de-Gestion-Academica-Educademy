@@ -2,6 +2,7 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -30,7 +31,7 @@ public class Materia {
     @JsonIgnoreProperties({"materiasDictadas", "handler", "hibernateLazyInitializer"})//Con esto se soluciona la recursión infinita en el JSON
     @ManyToMany
     @JoinTable(name = "materia_profesor", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "profesor_id"))
-    private List<Profesor> profesores = new ArrayList<>();
+    private Set<Profesor> profesores; //Si usamos List, estamos obligados a controlar que el profesor no se haya guardado con anterioridad, usando set nos olvidamos
 
     public Materia() {
     }
@@ -66,11 +67,11 @@ public class Materia {
         this.cursos = cursos;
     }
 
-    public List<Profesor> getProfesores() {
+    public Set<Profesor> getProfesores() {
         return profesores;
     }
 
-    public void setProfesores(List<Profesor> profesores) {
+    public void setProfesores(Set<Profesor> profesores) {
         this.profesores = profesores;
     }
 
