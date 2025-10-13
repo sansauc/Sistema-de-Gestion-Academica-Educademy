@@ -2,6 +2,7 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.controlle
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaDetalleDTO;
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.MateriaService;
@@ -27,15 +30,24 @@ public class MateriaController {
     private MateriaService service;
 
     @GetMapping
-    public List<Materia> list() {
-        return service.findAll();
+    public List<MateriaInfoDTO> list() {
+        return service.findAll()
+        .stream()
+        .map(m -> new MateriaInfoDTO(m.getIdMateria(), m.getNombre()))
+        .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<Materia> materiaOptional = service.findById(id);
         if (materiaOptional.isPresent()) {
-            return ResponseEntity.ok(materiaOptional.orElseThrow());
+            Materia m = materiaOptional.get();
+            MateriaDetalleDTO dto = new MateriaDetalleDTO(
+                m.getIdMateria(),
+                m.getNombre(), 
+                m.getCursos(), 
+                m.getProfesores());
+            return ResponseEntity.ok(dto);
         }
         return ResponseEntity.notFound().build();
     }

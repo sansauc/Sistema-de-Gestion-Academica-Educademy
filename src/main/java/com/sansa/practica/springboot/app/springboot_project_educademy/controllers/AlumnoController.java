@@ -2,6 +2,7 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.controlle
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnoResponseDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.AlumnoService;
 
@@ -26,8 +28,18 @@ public class AlumnoController {
     private AlumnoService service;
 
     @GetMapping
-    public List<Alumno> list(){
-        return service.findAll();
+    public List<AlumnoResponseDTO> list(){
+        return service.findAll()
+        .stream()
+        .map(a -> new AlumnoResponseDTO(
+            a.getId(),
+            a.getName(),
+            a.getLastname(),
+            a.getEmail(),
+            a.getBirthdate(),
+            a.getStudentId(),
+            a.getFechaInscripcion()))
+        .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
