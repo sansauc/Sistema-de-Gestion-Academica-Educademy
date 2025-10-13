@@ -2,8 +2,6 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
 
-import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Curso;
-
 //Esta clase se usa para crear y actualizar alumnos
 public class AlumnoRequestDTO {
 
@@ -16,20 +14,18 @@ public class AlumnoRequestDTO {
     //Atributos propios del alumno
     private String studentId;
     private Date fechaInscripcion;
-    private Curso cursoActual;
 
     
     public AlumnoRequestDTO() {}
 
     public AlumnoRequestDTO(String name, String lastname, String email, Date birthdate, String studentId,
-            Date fechaInscripcion, Curso cursoActual) {
+            Date fechaInscripcion) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.birthdate = birthdate;
         this.studentId = studentId;
         this.fechaInscripcion = fechaInscripcion;
-        this.cursoActual = cursoActual;
     }
 
     //Getters && Setters
@@ -81,13 +77,5 @@ public class AlumnoRequestDTO {
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
-
-    public Curso getCursoActual() {
-        return cursoActual;
-    }
-
-    public void setCursoActual(Curso cursoActual) {
-        this.cursoActual = cursoActual;
-    }    
 
 }

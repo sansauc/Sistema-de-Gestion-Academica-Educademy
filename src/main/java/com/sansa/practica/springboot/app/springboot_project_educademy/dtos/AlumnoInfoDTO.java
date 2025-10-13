@@ -1,10 +1,13 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-//Esta clase se usa solo para respuestas que involucren info de un alumno
-public class AlumnoResponseDTO {
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.AlumnosXMaterias;
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Curso;
 
+public class AlumnoInfoDTO {
     // Atributos heredados de Persona
     private Long id;
     private String name;
@@ -15,13 +18,12 @@ public class AlumnoResponseDTO {
     // Atributos específicos de Alumno
     private String studentId;
     private Date fechaInscripcion;
+    private CursoInfoDto cursoActual;
+    private List<MateriaInfoDTO> materiasCursadas;
 
-
-    public AlumnoResponseDTO() {}
-    
-    //Constructor sin curso y materia  
-    public AlumnoResponseDTO(Long id, String name, String lastname, String email, Date birthdate, String studentId,
-            Date fechaInscripcion) {
+    public AlumnoInfoDTO(Long id, String name, String lastname, String email, java.util.Date birthdate,
+            String studentId,
+            java.util.Date fechaInscripcion, Curso cursoActual, List<AlumnosXMaterias> materiasCursadas) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -29,11 +31,11 @@ public class AlumnoResponseDTO {
         this.birthdate = birthdate;
         this.studentId = studentId;
         this.fechaInscripcion = fechaInscripcion;
+        this.cursoActual = this.convertirACursoInfoDto(cursoActual);
+        this.materiasCursadas = materiasCursadas.stream()
+            .map(dto -> new MateriaInfoDTO(dto.getMateria().getIdMateria(), dto.getMateria().getNombre()))
+            .collect(Collectors.toList());
     }
-
-    
-    //Getters && Setters
-
 
     public Long getId() {
         return id;
@@ -90,5 +92,31 @@ public class AlumnoResponseDTO {
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
-    
+
+    public CursoInfoDto getCursoActual() {
+        return cursoActual;
+    }
+
+    public void setCursoActual(CursoInfoDto cursoActual) {
+        this.cursoActual = cursoActual;
+    }
+
+    public List<MateriaInfoDTO> getMateriasCursadas() {
+        return materiasCursadas;
+    }
+
+    public void setMateriasCursadas(List<MateriaInfoDTO> materiasCursadas) {
+        this.materiasCursadas = materiasCursadas;
+    }
+
+    private CursoInfoDto convertirACursoInfoDto(Curso curso) {
+        if (curso == null) {
+            return null;
+        }
+        CursoInfoDto dto = new CursoInfoDto();
+        dto.setNroCurso(curso.getNroCurso());
+        dto.setDivisionCurso(curso.getDivisionCurso());
+        return dto;
+    }
+
 }

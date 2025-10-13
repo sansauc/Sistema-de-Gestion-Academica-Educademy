@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnoInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnoResponseDTO;
+
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.AlumnoService;
 
@@ -28,52 +30,66 @@ public class AlumnoController {
     private AlumnoService service;
 
     @GetMapping
-    public List<AlumnoResponseDTO> list(){
+    public List<AlumnoResponseDTO> list() {
         return service.findAll()
-        .stream()
-        .map(a -> new AlumnoResponseDTO(
-            a.getId(),
-            a.getName(),
-            a.getLastname(),
-            a.getEmail(),
-            a.getBirthdate(),
-            a.getStudentId(),
-            a.getFechaInscripcion()))
-        .collect(Collectors.toList());
+                .stream()
+                .map(a -> new AlumnoResponseDTO(
+                        a.getId(),
+                        a.getName(),
+                        a.getLastname(),
+                        a.getEmail(),
+                        a.getBirthdate(),
+                        a.getStudentId(),
+                        a.getFechaInscripcion()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> view(@PathVariable Long id){ //devuelve un ResponseEntity (respuesta HTTP personalizada).
+    public ResponseEntity<?> view(@PathVariable Long id) { // devuelve un ResponseEntity (respuesta HTTP personalizada).
         Optional<Alumno> alumOptional = service.findById(id);
-        if (alumOptional.isPresent()){
-            return ResponseEntity.ok(alumOptional.orElseThrow()); //Si el alumno existe, lo devuelve con un estado HTTP 200 OK.
+        if (alumOptional.isPresent()) {
+            Alumno a = alumOptional.get();
+            AlumnoInfoDTO dto = this.convertToDetailDTO(a);
+            return ResponseEntity.ok(dto); // Si el alumno existe, lo devuelve con un estado HTTP
+                                                                  // 200 OK. Devuelve un dto
         }
-        return ResponseEntity.notFound().build(); //Si el alumno no fue encontrado, devuelve una respuesta HTTP 404 Not Found.
+        return ResponseEntity.notFound().build(); // Si el alumno no fue encontrado, devuelve una respuesta HTTP 404 Not                                               // Found.
     }
 
     @PostMapping
-    public ResponseEntity<Alumno> create(@RequestBody Alumno alumno){
+    public ResponseEntity<Alumno> create(@RequestBody Alumno alumno) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(alumno));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Alumno alumno, @PathVariable Long id){
+    public ResponseEntity<?> update(@RequestBody Alumno alumno, @PathVariable Long id) {
         Optional<Alumno> alumOptional = service.update(id, alumno);
-        if(alumOptional.isPresent()){
+        if (alumOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(alumOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){ 
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Alumno> alumOptional = service.delete(id);
-        if (alumOptional.isPresent()){
-            return ResponseEntity.ok(alumOptional.orElseThrow()); 
+        if (alumOptional.isPresent()) {
+            return ResponseEntity.ok(alumOptional.orElseThrow());
         }
-        return ResponseEntity.notFound().build(); 
+        return ResponseEntity.notFound().build();
     }
-    
+
+    private AlumnoInfoDTO convertToDetailDTO(Alumno a) {
+        AlumnoInfoDTO dto = new AlumnoInfoDTO(
+            a.getId(), 
+            a.getName(), 
+            a.getLastname(), 
+            a.getEmail(), 
+            a.getBirthdate(), 
+            a.getStudentId(), 
+            a.getFechaInscripcion(), 
+            a.getCursoActual(), a.getMateriasCursadas());
+        return dto;
+    }
 
 }
