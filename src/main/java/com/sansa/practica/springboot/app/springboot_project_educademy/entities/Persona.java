@@ -17,6 +17,7 @@ public class Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private long dni;
     private String name;
     private String lastname;
     private String email;
@@ -25,7 +26,8 @@ public class Persona {
     public Persona() {
     }
 
-    public Persona(String name, String lastname, String email, Date birthdate) {
+    public Persona(Long dni, String name, String lastname, String email, Date birthdate) {
+        this.dni = dni;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -40,6 +42,14 @@ public class Persona {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getDni(){
+        return dni;
+    }
+
+    public void setDni(Long dni){
+        this.dni = dni;
     }
 
     public String getName() {

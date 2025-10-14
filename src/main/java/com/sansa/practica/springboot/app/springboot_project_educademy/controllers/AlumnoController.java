@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnoInfoDTO;
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnoRequestDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnoResponseDTO;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
@@ -28,6 +29,8 @@ public class AlumnoController {
 
     @Autowired
     private AlumnoService service;
+
+    // --------------- LISTAR ----------------------
 
     @GetMapping
     public List<AlumnoResponseDTO> list() {
@@ -44,6 +47,8 @@ public class AlumnoController {
                 .collect(Collectors.toList());
     }
 
+    // --------------- VER EN DETALLE ----------------------
+
     @GetMapping("/{id}")
     public ResponseEntity<?> view(@PathVariable Long id) { // devuelve un ResponseEntity (respuesta HTTP personalizada).
         Optional<Alumno> alumOptional = service.findById(id);
@@ -51,15 +56,40 @@ public class AlumnoController {
             Alumno a = alumOptional.get();
             AlumnoInfoDTO dto = this.convertToDetailDTO(a);
             return ResponseEntity.ok(dto); // Si el alumno existe, lo devuelve con un estado HTTP
-                                                                  // 200 OK. Devuelve un dto
+                                           // 200 OK. Devuelve un dto
         }
-        return ResponseEntity.notFound().build(); // Si el alumno no fue encontrado, devuelve una respuesta HTTP 404 Not                                               // Found.
+        return ResponseEntity.notFound().build(); // Si el alumno no fue encontrado, devuelve una respuesta HTTP 404 Not
+                                                  // // Found.
     }
 
+    // --------------- CREAR ----------------------
+
+    /*
+     * Crear sin dtos
+     * 
+     * @PostMapping
+     * public ResponseEntity<Alumno> create(@RequestBody Alumno alumno) {
+     * return ResponseEntity.status(HttpStatus.CREATED).body(service.save(alumno));
+     * }
+     */
+
+    // Crear con Dto
+
     @PostMapping
-    public ResponseEntity<Alumno> create(@RequestBody Alumno alumno) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(alumno));
+    public ResponseEntity<?> create(@RequestBody AlumnoRequestDTO alumnoDTO) {
+        Alumno alumno = convertToEntity(alumnoDTO);
+        Optional<Alumno> saved = service.saveIfNotExists(alumno);
+        if (saved.isPresent()) {
+            AlumnoResponseDTO response = convertToResponseDTO(saved.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Ya existe un alumno con el mismo email o studentId");
+        }
     }
+
+    // --------------- ACTUALIZAR ----------------------
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody Alumno alumno, @PathVariable Long id) {
@@ -70,6 +100,8 @@ public class AlumnoController {
         return ResponseEntity.notFound().build();
     }
 
+    // --------------- BORRAR ----------------------
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Alumno> alumOptional = service.delete(id);
@@ -79,17 +111,42 @@ public class AlumnoController {
         return ResponseEntity.notFound().build();
     }
 
+    // ----------- MÉTODOS DE CONVERSIÓN --------------
+
+    private Alumno convertToEntity(AlumnoRequestDTO dto) {
+        Alumno a = new Alumno();
+        a.setName(dto.getName());
+        a.setLastname(dto.getLastname());
+        a.setEmail(dto.getEmail());
+        a.setBirthdate(dto.getBirthdate());
+        a.setStudentId(dto.getStudentId());
+        a.setFechaInscripcion(dto.getFechaInscripcion());
+        // NOTA: no se asignan curso ni materias cursadas aquí.
+        return a;
+    }
+
     private AlumnoInfoDTO convertToDetailDTO(Alumno a) {
         AlumnoInfoDTO dto = new AlumnoInfoDTO(
-            a.getId(), 
-            a.getName(), 
-            a.getLastname(), 
-            a.getEmail(), 
-            a.getBirthdate(), 
-            a.getStudentId(), 
-            a.getFechaInscripcion(), 
-            a.getCursoActual(), a.getMateriasCursadas());
+                a.getId(),
+                a.getName(),
+                a.getLastname(),
+                a.getEmail(),
+                a.getBirthdate(),
+                a.getStudentId(),
+                a.getFechaInscripcion(),
+                a.getCursoActual(),
+                a.getMateriasCursadas());
         return dto;
     }
 
+    private AlumnoResponseDTO convertToResponseDTO(Alumno a) {
+        return new AlumnoResponseDTO(
+                a.getId(),
+                a.getName(),
+                a.getLastname(),
+                a.getEmail(),
+                a.getBirthdate(),
+                a.getStudentId(),
+                a.getFechaInscripcion());
+    }
 }

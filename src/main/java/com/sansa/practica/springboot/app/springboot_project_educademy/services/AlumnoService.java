@@ -12,6 +12,7 @@ public interface AlumnoService {
     Alumno save(Alumno alumno);
     Optional <Alumno> update(Long id, Alumno alumno);
     Optional<Alumno> delete(Long id);
+    Optional<Alumno> saveIfNotExists(Alumno alumno);
 
     
 

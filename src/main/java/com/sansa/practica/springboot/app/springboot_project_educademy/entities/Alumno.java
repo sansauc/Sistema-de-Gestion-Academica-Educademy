@@ -29,8 +29,8 @@ public class Alumno extends Persona {
     public Alumno() {
     }
 
-    public Alumno(String name, String lastname, String email, Date birthdate, String studentId, Date fechaInscripcion) {
-        super(name, lastname, email, birthdate);
+    public Alumno(Long dni, String name, String lastname, String email, Date birthdate, String studentId, Date fechaInscripcion) {
+        super(dni, name, lastname, email, birthdate);
         this.studentId = studentId;
         this.fechaInscripcion = fechaInscripcion;
     }

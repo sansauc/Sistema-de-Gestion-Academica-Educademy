@@ -44,12 +44,12 @@ public class AlumnoServiceImpl implements AlumnoService {
         return alumOptional; // el metodo podria ser void, pero para saber si se borro devolvemos esto,
                              // status 404 (si se borro) o 201 (si salio bien)
     }
-   
+
     @Override
     @Transactional
     public Optional<Alumno> update(Long id, Alumno alumno) {
         Optional<Alumno> alumOptional = repository.findById(id);
-        if (alumOptional.isPresent()){
+        if (alumOptional.isPresent()) {
             Alumno alumDb = alumOptional.orElseThrow();
             alumDb.setName(alumno.getName());
             alumDb.setLastname(alumno.getLastname());
@@ -60,6 +60,30 @@ public class AlumnoServiceImpl implements AlumnoService {
             return Optional.of(repository.save(alumDb));
         }
         return alumOptional;
+    }
+
+    public Optional<Alumno> saveIfNotExists(Alumno alumno) {
+        
+        // Validar duplicado por dni
+        Optional<Alumno> existingByDni = repository.findByDni(alumno.getDni());
+        if (existingByDni.isPresent()) {
+            return Optional.empty(); // ya existe alumno con ese email
+        }
+        
+        // Validar duplicado por email
+        Optional<Alumno> existingByEmail = repository.findByEmail(alumno.getEmail());
+        if (existingByEmail.isPresent()) {
+            return Optional.empty(); // ya existe alumno con ese email
+        }
+
+        // Validar duplicado por studentId
+        Optional<Alumno> existingByStudentId = repository.findByStudentId(alumno.getStudentId());
+        if (existingByStudentId.isPresent()) {
+            return Optional.empty(); // ya existe alumno con ese ID de estudiante
+        }
+
+        Alumno saved = repository.save(alumno);
+        return Optional.of(saved);
     }
 
 }
