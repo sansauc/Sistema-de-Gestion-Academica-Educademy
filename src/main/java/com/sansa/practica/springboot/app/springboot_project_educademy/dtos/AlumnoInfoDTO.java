@@ -10,7 +10,9 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.entities.C
 public class AlumnoInfoDTO {
     // Atributos heredados de Persona
     private Long id;
+    private long dni;
     private String name;
+
     private String lastname;
     private String email;
     private Date birthdate;
@@ -21,10 +23,11 @@ public class AlumnoInfoDTO {
     private CursoInfoDto cursoActual;
     private List<MateriaInfoDTO> materiasCursadas;
 
-    public AlumnoInfoDTO(Long id, String name, String lastname, String email, java.util.Date birthdate,
+    public AlumnoInfoDTO(Long id, Long dni, String name, String lastname, String email, java.util.Date birthdate,
             String studentId,
             java.util.Date fechaInscripcion, Curso cursoActual, List<AlumnosXMaterias> materiasCursadas) {
         this.id = id;
+        this.dni = dni;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -33,8 +36,8 @@ public class AlumnoInfoDTO {
         this.fechaInscripcion = fechaInscripcion;
         this.cursoActual = this.convertirACursoInfoDto(cursoActual);
         this.materiasCursadas = materiasCursadas.stream()
-            .map(dto -> new MateriaInfoDTO(dto.getMateria().getIdMateria(), dto.getMateria().getNombre()))
-            .collect(Collectors.toList());
+                .map(dto -> new MateriaInfoDTO(dto.getMateria().getIdMateria(), dto.getMateria().getNombre()))
+                .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -107,6 +110,14 @@ public class AlumnoInfoDTO {
 
     public void setMateriasCursadas(List<MateriaInfoDTO> materiasCursadas) {
         this.materiasCursadas = materiasCursadas;
+    }
+
+    public long getDni() {
+        return dni;
+    }
+
+    public void setDni(long dni) {
+        this.dni = dni;
     }
 
     private CursoInfoDto convertirACursoInfoDto(Curso curso) {

@@ -32,20 +32,31 @@ public class AlumnoController {
 
     // --------------- LISTAR ----------------------
 
+    /*
+     * @GetMapping
+     * public List<AlumnoResponseDTO> list() {
+     * return service.findAll()
+     * .stream()
+     * .map(a -> new AlumnoResponseDTO(
+     * a.getId(),
+     * a.getDni(),
+     * a.getName(),
+     * a.getLastname(),
+     * a.getEmail(),
+     * a.getBirthdate(),
+     * a.getStudentId(),
+     * a.getFechaInscripcion()))
+     * .collect(Collectors.toList());
+     * }
+     */// Este codigo sirve
+
     @GetMapping
     public List<AlumnoResponseDTO> list() {
         return service.findAll()
                 .stream()
-                .map(a -> new AlumnoResponseDTO(
-                        a.getId(),
-                        a.getName(),
-                        a.getLastname(),
-                        a.getEmail(),
-                        a.getBirthdate(),
-                        a.getStudentId(),
-                        a.getFechaInscripcion()))
+                .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
-    }
+    }// otra forma de hacerlo, usando el metodo convertToResponseDTO
 
     // --------------- VER EN DETALLE ----------------------
 
@@ -91,22 +102,50 @@ public class AlumnoController {
 
     // --------------- ACTUALIZAR ----------------------
 
+    /*
+     * @PutMapping("/{id}")
+     * public ResponseEntity<?> update(@RequestBody Alumno alumno, @PathVariable
+     * Long id) {
+     * Optional<Alumno> alumOptional = service.update(id, alumno);
+     * if (alumOptional.isPresent()) {
+     * return
+     * ResponseEntity.status(HttpStatus.CREATED).body(alumOptional.orElseThrow());
+     * }
+     * return ResponseEntity.notFound().build();
+     * }
+     */// Esto sirve, metodo sin dto
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Alumno alumno, @PathVariable Long id) {
-        Optional<Alumno> alumOptional = service.update(id, alumno);
-        if (alumOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(alumOptional.orElseThrow());
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AlumnoRequestDTO alumnoDTO) {
+        Alumno alumno = convertToEntity(alumnoDTO);
+        Optional<Alumno> updated = service.update(id, alumno);
+        if (updated.isPresent()) {
+            AlumnoResponseDTO response = convertToResponseDTO(updated.get());
+            System.out.println("Hasta aca llego, nuevo email alumno: " + response.getEmail());
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
         return ResponseEntity.notFound().build();
     }
 
     // --------------- BORRAR ----------------------
 
+    /*
+     * @DeleteMapping("/{id}")
+     * public ResponseEntity<?> delete(@PathVariable Long id) {
+     * Optional<Alumno> alumOptional = service.delete(id);
+     * if (alumOptional.isPresent()) {
+     * return ResponseEntity.ok(alumOptional.orElseThrow());
+     * }
+     * return ResponseEntity.notFound().build();
+     * }
+     */// Esto sirve, metodo sin dto
+     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Optional<Alumno> alumOptional = service.delete(id);
-        if (alumOptional.isPresent()) {
-            return ResponseEntity.ok(alumOptional.orElseThrow());
+        Optional<Alumno> deleted = service.delete(id);
+        if (deleted.isPresent()) {
+            AlumnoResponseDTO response = convertToResponseDTO(deleted.get());
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.notFound().build();
     }
@@ -115,6 +154,7 @@ public class AlumnoController {
 
     private Alumno convertToEntity(AlumnoRequestDTO dto) {
         Alumno a = new Alumno();
+        a.setDni(dto.getDni());
         a.setName(dto.getName());
         a.setLastname(dto.getLastname());
         a.setEmail(dto.getEmail());
@@ -128,6 +168,7 @@ public class AlumnoController {
     private AlumnoInfoDTO convertToDetailDTO(Alumno a) {
         AlumnoInfoDTO dto = new AlumnoInfoDTO(
                 a.getId(),
+                a.getDni(),
                 a.getName(),
                 a.getLastname(),
                 a.getEmail(),
@@ -142,6 +183,7 @@ public class AlumnoController {
     private AlumnoResponseDTO convertToResponseDTO(Alumno a) {
         return new AlumnoResponseDTO(
                 a.getId(),
+                a.getDni(),
                 a.getName(),
                 a.getLastname(),
                 a.getEmail(),

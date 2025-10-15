@@ -7,6 +7,7 @@ public class AlumnoResponseDTO {
 
     // Atributos heredados de Persona
     private Long id;
+    private Long dni;
     private String name;
     private String lastname;
     private String email;
@@ -20,9 +21,10 @@ public class AlumnoResponseDTO {
     public AlumnoResponseDTO() {}
     
     //Constructor sin curso y materia  
-    public AlumnoResponseDTO(Long id, String name, String lastname, String email, Date birthdate, String studentId,
+    public AlumnoResponseDTO(Long id, Long dni, String name, String lastname, String email, Date birthdate, String studentId,
             Date fechaInscripcion) {
         this.id = id;
+        this.dni = dni;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -90,5 +92,14 @@ public class AlumnoResponseDTO {
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
+
+    public Long getDni() {
+        return dni;
+    }
+
+    public void setDni(Long dni) {
+        this.dni = dni;
+    }
+
     
 }

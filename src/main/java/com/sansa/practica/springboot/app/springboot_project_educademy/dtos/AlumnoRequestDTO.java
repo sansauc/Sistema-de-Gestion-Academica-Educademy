@@ -6,6 +6,7 @@ import java.util.Date;
 public class AlumnoRequestDTO {
 
     //Atributos de la persona
+    private Long dni;
     private String name;
     private String lastname;
     private String email;
@@ -18,8 +19,9 @@ public class AlumnoRequestDTO {
     
     public AlumnoRequestDTO() {}
 
-    public AlumnoRequestDTO(String name, String lastname, String email, Date birthdate, String studentId,
+    public AlumnoRequestDTO(Long dni, String name, String lastname, String email, Date birthdate, String studentId,
             Date fechaInscripcion) {
+        this.dni = dni;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
@@ -76,6 +78,14 @@ public class AlumnoRequestDTO {
 
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public Long getDni() {
+        return dni;
+    }
+
+    public void setDni(Long dni) {
+        this.dni = dni;
     }
 
 }

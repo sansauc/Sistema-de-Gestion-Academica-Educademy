@@ -2,6 +2,7 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ public class Persona {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private long dni;
     private String name;
     private String lastname;
@@ -44,11 +46,11 @@ public class Persona {
         this.id = id;
     }
 
-    public Long getDni(){
+    public Long getDni() {
         return dni;
     }
 
-    public void setDni(Long dni){
+    public void setDni(Long dni) {
         this.dni = dni;
     }
 
