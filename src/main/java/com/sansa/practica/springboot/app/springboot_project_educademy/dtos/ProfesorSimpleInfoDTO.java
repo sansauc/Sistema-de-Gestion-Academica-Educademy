@@ -3,12 +3,13 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 public class ProfesorSimpleInfoDTO {
 
     private Long id;
+    private Long dni;
     private String name;
     private String lastname;
     private String email;
     private String profesorId;
 
-    public ProfesorSimpleInfoDTO(Long id, String name, String lastname, String email, String profesorId) {
+    public ProfesorSimpleInfoDTO(Long id, Long dni, String name, String lastname, String email, String profesorId) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -54,6 +55,14 @@ public class ProfesorSimpleInfoDTO {
 
     public void setProfesorId(String profesorId) {
         this.profesorId = profesorId;
+    }
+
+    public Long getDni() {
+        return dni;
+    }
+
+    public void setDni(Long dni) {
+        this.dni = dni;
     }
 
 }

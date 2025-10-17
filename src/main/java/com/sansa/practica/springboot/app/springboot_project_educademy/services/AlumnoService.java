@@ -8,12 +8,15 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.entities.A
 public interface AlumnoService {
 
     List<Alumno> findAll();
-    Optional<Alumno> findById(Long id);
-    Alumno save(Alumno alumno);
-    Optional <Alumno> update(Long id, Alumno alumno);
-    Optional<Alumno> delete(Long id);
-    Optional<Alumno> saveIfNotExists(Alumno alumno);
 
-    
+    Optional<Alumno> findById(Long id);
+
+    Alumno save(Alumno alumno);
+
+    Optional<Alumno> update(Long id, Alumno alumno);
+
+    Optional<Alumno> delete(Long id);
+
+    Optional<Alumno> saveIfNotExists(Alumno alumno);
 
 }

@@ -8,6 +8,9 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.entities.P
 
 public interface ProfesorRepository extends CrudRepository<Profesor, Long> {
 
-    Optional<Profesor> findByProfesorId(String profesorId);//Para que busque por profesorID
+    Optional<Profesor> findByProfesorId(String profesorId);// Para que busque por profesorID
 
+    Optional<Profesor> findByEmail(String email);
+
+    Optional<Profesor> findByDni(Long dni);
 }

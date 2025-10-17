@@ -88,4 +88,28 @@ public class ProfesorServiceImpl implements ProfesorService{
       return profOptional;
     }
 
+    @Override
+    public Optional<Profesor> saveIfNotExists(Profesor profesor) {
+              // Validar duplicado por dni
+        Optional<Profesor> existingByDni = repository.findByDni(profesor.getDni());
+        if (existingByDni.isPresent()) {
+            return Optional.empty(); // ya existe profesor con ese email
+        }
+        
+        // Validar duplicado por email
+        Optional<Profesor> existingByEmail = repository.findByEmail(profesor.getEmail());
+        if (existingByEmail.isPresent()) {
+            return Optional.empty(); // ya existe prfesor con ese email
+        }
+
+        // Validar duplicado por profesorID
+        Optional<Profesor> existingByStudentId = repository.findByProfesorId(profesor.getProfesorId());
+        if (existingByStudentId.isPresent()) {
+            return Optional.empty(); // ya existe profesor con ese ID 
+        }
+
+        Profesor saved = repository.save(profesor);
+        return Optional.of(saved);
+    }
+
 }

@@ -22,6 +22,7 @@ public class MateriaDetalleDTO {
         this.profesores = profesores.stream()
         .map(p -> new ProfesorSimpleInfoDTO(
             p.getId(), 
+            p.getDni(),
             p.getName(),
             p.getLastname(),
             p.getEmail(),
