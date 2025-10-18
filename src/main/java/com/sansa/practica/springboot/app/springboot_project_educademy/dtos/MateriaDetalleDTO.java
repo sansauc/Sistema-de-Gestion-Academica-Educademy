@@ -12,7 +12,7 @@ public class MateriaDetalleDTO {
     private Long idMateria;
     private String nombre;
     private List<Curso> cursos;
-    private List<ProfesorSimpleInfoDTO> profesores;
+    private List<ProfesorResponseDTO> profesores;
 
     public MateriaDetalleDTO(Long idMateria, String nombre, List<Curso> cursos, Set<Profesor> profesores) {
         this.idMateria = idMateria;
@@ -20,16 +20,17 @@ public class MateriaDetalleDTO {
         this.cursos = cursos;
         //this.profesores = new ArrayList<>(profesores); //Asi se convierte de un set a un arrayList
         this.profesores = profesores.stream()
-        .map(p -> new ProfesorSimpleInfoDTO(
+        .map(p -> new ProfesorResponseDTO(
             p.getId(), 
             p.getDni(),
             p.getName(),
             p.getLastname(),
             p.getEmail(),
-            p.getProfesorId()))
+            p.getBirthdate(),
+            p.getProfesorId(),
+            p.getFechaIngreso()))
         .collect(Collectors.toList()); //Convertimos el profesor a un dto para que no muestre las materias que dicta cuando recuperamos la materia
     }
-
     
     public Long getIdMateria() {
         return idMateria;

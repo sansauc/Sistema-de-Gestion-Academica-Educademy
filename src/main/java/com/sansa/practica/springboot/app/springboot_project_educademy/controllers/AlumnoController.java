@@ -121,7 +121,6 @@ public class AlumnoController {
         Optional<Alumno> updated = service.update(id, alumno);
         if (updated.isPresent()) {
             AlumnoResponseDTO response = convertToResponseDTO(updated.get());
-            System.out.println("Hasta aca llego, nuevo email alumno: " + response.getEmail());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
         return ResponseEntity.notFound().build();

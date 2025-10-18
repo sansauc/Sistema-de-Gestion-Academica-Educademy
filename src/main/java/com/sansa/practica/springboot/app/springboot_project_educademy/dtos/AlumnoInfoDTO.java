@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.AlumnosXMaterias;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Curso;
 
+//Se usa para responder con la informacion completa del alumno, incluyendo curso actual y materias cursadas
 public class AlumnoInfoDTO {
     // Atributos heredados de Persona
     private Long id;

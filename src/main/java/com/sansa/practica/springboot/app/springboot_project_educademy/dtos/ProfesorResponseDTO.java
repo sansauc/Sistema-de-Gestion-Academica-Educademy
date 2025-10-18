@@ -2,9 +2,7 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
 
-//Esta clase se usa solo para respuestas que involucren info de un alumno, no incluye curso actual y materias cursadas
-public class AlumnoResponseDTO {
-
+public class ProfesorResponseDTO {
     // Atributos heredados de Persona
     private Long id;
     private Long dni;
@@ -13,29 +11,24 @@ public class AlumnoResponseDTO {
     private String email;
     private Date birthdate;
 
-    // Atributos específicos de Alumno
-    private String studentId;
-    private Date fechaInscripcion;
-
-
-    public AlumnoResponseDTO() {}
+    // Atributos específicos del profesor
+    private String profesorID;
+    private Date fechaIngreso;
     
-    //Constructor sin curso y materia  
-    public AlumnoResponseDTO(Long id, Long dni, String name, String lastname, String email, Date birthdate, String studentId,
-            Date fechaInscripcion) {
+    public ProfesorResponseDTO() {
+    }
+
+    public ProfesorResponseDTO(Long id, Long dni, String name, String lastname, String email, Date birthdate,
+            String profesorID, Date fechaIngreso) {
         this.id = id;
         this.dni = dni;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.birthdate = birthdate;
-        this.studentId = studentId;
-        this.fechaInscripcion = fechaInscripcion;
+        this.profesorID = profesorID;
+        this.fechaIngreso = fechaIngreso;
     }
-
-    
-    //Getters && Setters
-
 
     public Long getId() {
         return id;
@@ -43,6 +36,14 @@ public class AlumnoResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getDni() {
+        return dni;
+    }
+
+    public void setDni(Long dni) {
+        this.dni = dni;
     }
 
     public String getName() {
@@ -77,29 +78,22 @@ public class AlumnoResponseDTO {
         this.birthdate = birthdate;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getProfesorID() {
+        return profesorID;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setProfesorID(String profesorID) {
+        this.profesorID = profesorID;
     }
 
-    public Date getFechaInscripcion() {
-        return fechaInscripcion;
+    public Date getFechaIngreso() {
+        return fechaIngreso;
     }
 
-    public void setFechaInscripcion(Date fechaInscripcion) {
-        this.fechaInscripcion = fechaInscripcion;
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
-    public Long getDni() {
-        return dni;
-    }
-
-    public void setDni(Long dni) {
-        this.dni = dni;
-    }
-
+    
     
 }
