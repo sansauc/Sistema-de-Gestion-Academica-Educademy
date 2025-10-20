@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorRequestDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorResponseDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorSimpleInfoDTO;
@@ -87,7 +88,8 @@ public class ProfesorController {
     }
 
     @PutMapping("/{id}/agregar-materia")
-    public ResponseEntity<?> agregarMateria(@RequestBody Materia materia, @PathVariable Long id) {
+    public ResponseEntity<?> agregarMateria(@RequestBody MateriaInfoDTO materiaDto, @PathVariable Long id) {
+        Materia materia = converToEntityMateria(materiaDto);
         Optional<Profesor> profOptional = service.agregarMateria(id, materia);
         if (profOptional.isPresent()) {
             return ResponseEntity.ok(profOptional.orElseThrow());
@@ -96,7 +98,8 @@ public class ProfesorController {
     }
 
     @PutMapping("/{id}/quitar-materia")
-    public ResponseEntity<?> quitarMateria(@RequestBody Materia materia, @PathVariable Long id) {
+    public ResponseEntity<?> quitarMateria(@RequestBody MateriaInfoDTO materiaDto, @PathVariable Long id) {
+         Materia materia = converToEntityMateria(materiaDto);
         Optional<Profesor> profOptional = service.quitarMateria(id, materia);
         if (profOptional.isPresent()) {
             return ResponseEntity.ok(profOptional.orElseThrow());
@@ -142,6 +145,13 @@ public class ProfesorController {
                 p.getBirthdate(),
                 p.getProfesorId(),
                 p.getFechaIngreso());
+    }
+
+    private Materia converToEntityMateria(MateriaInfoDTO dto) {
+       Materia m = new Materia();
+        m.setIdMateria(dto.getIdMateria());
+        m.setNombre(dto.getNombre());     
+        return m;
     }
 
 }

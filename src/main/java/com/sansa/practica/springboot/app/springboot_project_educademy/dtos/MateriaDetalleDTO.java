@@ -44,7 +44,7 @@ public class MateriaDetalleDTO {
         return cursos;
     }
 
-    public List<ProfesorSimpleInfoDTO> getProfesores() {
+    public List<ProfesorResponseDTO> getProfesores() {
         return profesores;
     }
 }
