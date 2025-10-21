@@ -32,9 +32,9 @@ public class MateriaController {
     @GetMapping
     public List<MateriaInfoDTO> list() {
         return service.findAll()
-        .stream()
-        .map(m -> new MateriaInfoDTO(m.getIdMateria(), m.getNombre()))
-        .collect(Collectors.toList());
+                .stream()
+                .map(this::convertToMateriaInfoDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -42,11 +42,7 @@ public class MateriaController {
         Optional<Materia> materiaOptional = service.findById(id);
         if (materiaOptional.isPresent()) {
             Materia m = materiaOptional.get();
-            MateriaDetalleDTO dto = new MateriaDetalleDTO(
-                m.getIdMateria(),
-                m.getNombre(), 
-                m.getCursos(), 
-                m.getProfesores());
+            MateriaDetalleDTO dto = this.convertToMateriaDetalleDTO(m);
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.notFound().build();
@@ -83,5 +79,22 @@ public class MateriaController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    // ----------- MÉTODOS DE CONVERSIÓN --------------
+
+    private MateriaDetalleDTO convertToMateriaDetalleDTO(Materia m) {
+        return new MateriaDetalleDTO(
+                m.getIdMateria(),
+                m.getNombre(),
+                m.getCursos(),
+                m.getProfesores());
+    }
+
+    private MateriaInfoDTO convertToMateriaInfoDTO(Materia m){
+        return new MateriaInfoDTO(
+            m.getIdMateria(), 
+            m.getNombre());
+    }
+    
 
 }
