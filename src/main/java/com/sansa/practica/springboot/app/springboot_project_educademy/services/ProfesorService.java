@@ -3,7 +3,6 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 
 public interface ProfesorService {
@@ -19,9 +18,5 @@ public interface ProfesorService {
     Optional<Profesor> delete(Long id);
 
     Optional<Profesor> saveIfNotExists(Profesor profesor);
-
-    Optional<Profesor> agregarMateria(Long id, Materia materia);
-
-    Optional<Profesor> quitarMateria(Long id, Materia materia);
 
 }

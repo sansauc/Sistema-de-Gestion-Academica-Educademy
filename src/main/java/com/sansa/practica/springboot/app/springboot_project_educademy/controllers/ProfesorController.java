@@ -87,26 +87,6 @@ public class ProfesorController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{id}/agregar-materia")
-    public ResponseEntity<?> agregarMateria(@RequestBody MateriaInfoDTO materiaDto, @PathVariable Long id) {
-        Materia materia = converToEntityMateria(materiaDto);
-        Optional<Profesor> profOptional = service.agregarMateria(id, materia);
-        if (profOptional.isPresent()) {
-            return ResponseEntity.ok(profOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @PutMapping("/{id}/quitar-materia")
-    public ResponseEntity<?> quitarMateria(@RequestBody MateriaInfoDTO materiaDto, @PathVariable Long id) {
-         Materia materia = converToEntityMateria(materiaDto);
-        Optional<Profesor> profOptional = service.quitarMateria(id, materia);
-        if (profOptional.isPresent()) {
-            return ResponseEntity.ok(profOptional.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     // ----------- MÉTODOS DE CONVERSIÓN --------------
 
     private Profesor converToEntity(ProfesorRequestDTO dto) {
@@ -145,13 +125,6 @@ public class ProfesorController {
                 p.getBirthdate(),
                 p.getProfesorId(),
                 p.getFechaIngreso());
-    }
-
-    private Materia converToEntityMateria(MateriaInfoDTO dto) {
-       Materia m = new Materia();
-        m.setIdMateria(dto.getIdMateria());
-        m.setNombre(dto.getNombre());     
-        return m;
     }
 
 }

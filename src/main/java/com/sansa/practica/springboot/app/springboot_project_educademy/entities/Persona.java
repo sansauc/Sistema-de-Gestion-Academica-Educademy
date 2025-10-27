@@ -19,7 +19,7 @@ public class Persona {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private long dni;
+    private Long dni;
     private String name;
     private String lastname;
     private String email;

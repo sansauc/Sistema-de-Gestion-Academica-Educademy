@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 
-
 //Esta clase se usa solo para respuestas que involucren info de un profesor, incluye las materias dictadas
 public class ProfesorSimpleInfoDTO {
 
@@ -20,7 +19,11 @@ public class ProfesorSimpleInfoDTO {
     private Date fechaIngreso;
     private List<MateriaInfoDTO> materiasDictadas;
 
-    public ProfesorSimpleInfoDTO(Long id, Long dni, String name, String lastname, String email, Date birthdate, String profesorId, Date fechaIngreso, List<Materia> materiasDictadas) {
+    public ProfesorSimpleInfoDTO() {
+    }
+
+    public ProfesorSimpleInfoDTO(Long id, Long dni, String name, String lastname, String email, Date birthdate,
+            String profesorId, Date fechaIngreso, List<Materia> materiasDictadas) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -28,9 +31,11 @@ public class ProfesorSimpleInfoDTO {
         this.birthdate = birthdate;
         this.profesorId = profesorId;
         this.fechaIngreso = fechaIngreso;
-        this.materiasDictadas = materiasDictadas.stream()
-                .map(dto -> new MateriaInfoDTO(dto.getIdMateria(), dto.getNombre()))
-                .collect(Collectors.toList());
+        this.materiasDictadas = (materiasDictadas != null)
+                ? materiasDictadas.stream()
+                        .map(dto -> new MateriaInfoDTO(dto.getIdMateria(), dto.getNombre()))
+                        .collect(Collectors.toList())
+                : List.of(); // <-- evita el null, es decir, no llega materiasDictadas o es null, se inicializa con una lista vacía y no rompe nada.
     }
 
     public Long getId() {
@@ -104,8 +109,5 @@ public class ProfesorSimpleInfoDTO {
     public void setMateriasDictadas(List<MateriaInfoDTO> materiasDictadas) {
         this.materiasDictadas = materiasDictadas;
     }
-
-    
-
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaDetalleDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaInfoDTO;
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorSimpleInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.MateriaService;
@@ -74,7 +75,8 @@ public class MateriaController {
     }
 
     @PutMapping("/{id}/agregar-profesor")
-    public ResponseEntity<?> agregarProfesor(@RequestBody Profesor profesor, @PathVariable Long id) {
+    public ResponseEntity<?> agregarProfesor(@RequestBody ProfesorSimpleInfoDTO profesorDto, @PathVariable Long id) {
+        Profesor profesor = converToEntityProfesor(profesorDto);
         Optional<Materia> materOptional = service.agregarProfesor(id, profesor);
         if (materOptional.isPresent()) {
             return ResponseEntity.ok(materOptional.orElseThrow());
@@ -83,7 +85,8 @@ public class MateriaController {
     }
 
     @PutMapping("/{id}/quitar-profesor")
-    public ResponseEntity<?> quitarProfesor(@RequestBody Profesor profesor, @PathVariable Long id) {
+    public ResponseEntity<?> quitarProfesor(@RequestBody ProfesorSimpleInfoDTO profesorDto, @PathVariable Long id) {
+        Profesor profesor = converToEntityProfesor(profesorDto);
         Optional<Materia> materOptional = service.quitarProfesor(id, profesor);
         if (materOptional.isPresent()) {
             return ResponseEntity.ok(materOptional.orElseThrow());
@@ -112,6 +115,19 @@ public class MateriaController {
         return new MateriaInfoDTO(
             m.getIdMateria(), 
             m.getNombre());
+    }
+
+    private Profesor converToEntityProfesor(ProfesorSimpleInfoDTO dto){
+        Profesor profesor = new Profesor();
+        profesor.setId(dto.getId());
+        profesor.setDni(dto.getDni());
+        profesor.setName(dto.getName());
+        profesor.setLastname(dto.getLastname());
+        profesor.setEmail(dto.getEmail());
+        profesor.setBirthdate(dto.getBirthdate());
+        profesor.setProfesorId(dto.getProfesorId());
+        profesor.setFechaIngreso(dto.getFechaIngreso());
+        return profesor;
     }
 
 }
