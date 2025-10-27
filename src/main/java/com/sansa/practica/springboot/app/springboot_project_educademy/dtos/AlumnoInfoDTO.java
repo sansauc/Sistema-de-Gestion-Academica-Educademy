@@ -21,7 +21,7 @@ public class AlumnoInfoDTO {
     // Atributos específicos de Alumno
     private String studentId;
     private Date fechaInscripcion;
-    private CursoInfoDto cursoActual;
+    private CursoResponseDTO cursoActual;
     private List<MateriaInfoDTO> materiasCursadas;
 
     public AlumnoInfoDTO(Long id, Long dni, String name, String lastname, String email, java.util.Date birthdate,
@@ -35,7 +35,7 @@ public class AlumnoInfoDTO {
         this.birthdate = birthdate;
         this.studentId = studentId;
         this.fechaInscripcion = fechaInscripcion;
-        this.cursoActual = this.convertirACursoInfoDto(cursoActual);
+        this.cursoActual = this.convertirACursoDto(cursoActual);
         this.materiasCursadas = materiasCursadas.stream()
                 .map(dto -> new MateriaInfoDTO(dto.getMateria().getIdMateria(), dto.getMateria().getNombre()))
                 .collect(Collectors.toList());
@@ -97,11 +97,11 @@ public class AlumnoInfoDTO {
         this.fechaInscripcion = fechaInscripcion;
     }
 
-    public CursoInfoDto getCursoActual() {
+    public CursoResponseDTO getCursoActual() {
         return cursoActual;
     }
 
-    public void setCursoActual(CursoInfoDto cursoActual) {
+    public void setCursoActual(CursoResponseDTO cursoActual) {
         this.cursoActual = cursoActual;
     }
 
@@ -121,11 +121,11 @@ public class AlumnoInfoDTO {
         this.dni = dni;
     }
 
-    private CursoInfoDto convertirACursoInfoDto(Curso curso) {
+    private CursoResponseDTO convertirACursoDto(Curso curso) {
         if (curso == null) {
             return null;
         }
-        CursoInfoDto dto = new CursoInfoDto();
+        CursoResponseDTO dto = new CursoResponseDTO();
         dto.setNroCurso(curso.getNroCurso());
         dto.setDivisionCurso(curso.getDivisionCurso());
         return dto;

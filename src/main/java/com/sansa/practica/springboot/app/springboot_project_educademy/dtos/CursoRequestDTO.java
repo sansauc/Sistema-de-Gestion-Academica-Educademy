@@ -1,11 +1,17 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
-public class CursoInfoDto {
-
+public class CursoRequestDTO {
+    
     private int nroCurso;
     private String divisionCurso;
 
-    public CursoInfoDto(){}
+    public CursoRequestDTO(){}
+
+    public CursoRequestDTO(int nroCurso, String divisionCurso) {
+        this.nroCurso = nroCurso;
+        this.divisionCurso = divisionCurso;
+    }
+
 
     public int getNroCurso() {
         return nroCurso;
@@ -22,5 +28,4 @@ public class CursoInfoDto {
     public void setDivisionCurso(String divisionCurso) {
         this.divisionCurso = divisionCurso;
     }
-
 }

@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorRequestDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorResponseDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorSimpleInfoDTO;
-import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.ProfesorService;
 
@@ -72,9 +70,9 @@ public class ProfesorController {
         if (updated.isPresent()) {
             ProfesorResponseDTO response = convertToResponsDTO(updated.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        } 
+        return ResponseEntity.notFound().build();
+
     }
 
     @DeleteMapping("/{id}")
