@@ -49,8 +49,18 @@ public class MateriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Materia> create(@RequestBody Materia materia) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(materia));
+    public ResponseEntity<?> create(@RequestBody MateriaInfoDTO dto) {
+        Materia materia = this.convertToEntity(dto);
+        Optional<Materia> saved = service.saveIfNotExists(materia);
+        if (saved.isPresent()){
+            MateriaInfoDTO response = convertToMateriaInfoDTO(saved.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Ya existe una materia con ese nombre");
+        }
+
     }
 
     @DeleteMapping("/{id}")
@@ -82,6 +92,13 @@ public class MateriaController {
 
     // ----------- MÉTODOS DE CONVERSIÓN --------------
 
+    private Materia convertToEntity(MateriaInfoDTO m){
+        Materia materia = new Materia();
+        materia.setIdMateria(m.getIdMateria());
+        materia.setNombre(m.getNombre());
+        return materia;
+    } 
+
     private MateriaDetalleDTO convertToMateriaDetalleDTO(Materia m) {
         return new MateriaDetalleDTO(
                 m.getIdMateria(),
@@ -95,6 +112,5 @@ public class MateriaController {
             m.getIdMateria(), 
             m.getNombre());
     }
-    
 
 }

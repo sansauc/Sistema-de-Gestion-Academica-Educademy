@@ -14,6 +14,7 @@ public interface MateriaService {
     Materia save(Materia materia);
     //Optional<Materia> update(Long id, Materia materia);
     Optional<Materia> delete(Long id);
+    Optional<Materia> saveIfNotExists(Materia materia);
     Optional<Materia> agregarProfesor(Long idMateria, Profesor profesor);
     Optional<Materia> quitarProfesor(Long idMateria, Profesor profesor);
 

@@ -48,6 +48,20 @@ public class MateriaServiceImpl implements MateriaService {
         });
         return materiaOptional;
     }
+    
+    @Override
+    public Optional<Materia> saveIfNotExists(Materia materia) {
+        
+        //Valida por el nombre
+        Optional<Materia> existingByDni = repository.findByNombre(materia.getNombre());
+        if (existingByDni.isPresent()){
+            return Optional.empty(); //Ya existe una materia con ese nombre
+        }
+
+        Materia saved = repository.save(materia);
+        return Optional.of(saved);
+    }
+
 
     //Para usar estos ultimos 2 metodos el profesor debe existir
     @Override
@@ -86,5 +100,6 @@ public class MateriaServiceImpl implements MateriaService {
         }
         return materOptional;
     }
+
 
 }
