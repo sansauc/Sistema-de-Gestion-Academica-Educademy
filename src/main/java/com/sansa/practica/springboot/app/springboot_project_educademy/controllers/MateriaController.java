@@ -65,9 +65,10 @@ public class MateriaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Optional<Materia> materOptional = service.delete(id);
-        if (materOptional.isPresent()) {
-            return ResponseEntity.ok(materOptional.orElseThrow());
+        Optional<Materia> deleted = service.delete(id);
+        if (deleted.isPresent()) {
+            MateriaDetalleDTO response = convertToMateriaDetalleDTO(deleted.get());
+            return ResponseEntity.ok(response);
         }
         return ResponseEntity.notFound().build();
     }
