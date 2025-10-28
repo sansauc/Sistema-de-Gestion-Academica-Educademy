@@ -3,6 +3,8 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,14 +19,16 @@ public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCurso;
-    
+
     private int nroCurso;
     private String divisionCurso;
 
+    @JsonIgnoreProperties({ "cursos", "handler", "hibernateLazyInitializer" })
     @ManyToMany(mappedBy = "cursos")
     private List<Materia> materias = new ArrayList<>();
 
-    public Curso(){}
+    public Curso() {
+    }
 
     public Curso(Long idCurso, int nroCurso, String divisionCurso) {
         this.idCurso = idCurso;
@@ -32,7 +36,7 @@ public class Curso {
         this.divisionCurso = divisionCurso;
     }
 
-    //Getters && Setters
+    // Getters && Setters
 
     public Long getIdCurso() {
         return idCurso;
@@ -66,13 +70,11 @@ public class Curso {
         this.materias = materias;
     }
 
-    //Metodos de Clase
-    
-    public void agregarMateria(Materia materia){
+    // Metodos de Clase
+
+    public void agregarMateria(Materia materia) {
         this.materias.add(materia);
         materia.getCursos().add(this);
     }
 
-
-    
 }

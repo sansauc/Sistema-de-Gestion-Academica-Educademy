@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Curso;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
+import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.CursoRepository;
 import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.MateriaRepository;
 import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.ProfesorRepository;
 
@@ -20,6 +22,9 @@ public class MateriaServiceImpl implements MateriaService {
 
     @Autowired
     private ProfesorRepository repository2;
+
+    @Autowired
+    private CursoRepository repository3;
 
     @Transactional(readOnly = true)
     @Override
@@ -43,24 +48,26 @@ public class MateriaServiceImpl implements MateriaService {
     @Transactional
     public Optional<Materia> delete(Long id) {
         Optional<Materia> materiaOptional = repository.findById(id);
-        
+
         materiaOptional.ifPresent(materiaDb -> {
-  
-            //Quitamos los Cursos y Profesores de las listas, para poder borrar la materia, evitamos el nullpointerexception si las listas son null
-            //Primero se elimina la referencia de la materia tanto en cursos como en profesores antes de borrarla
-            
-            if (materiaDb.getCursos() != null){
+
+            // Quitamos los Cursos y Profesores de las listas, para poder borrar la materia,
+            // evitamos el nullpointerexception si las listas son null
+            // Primero se elimina la referencia de la materia tanto en cursos como en
+            // profesores antes de borrarla
+
+            if (materiaDb.getCursos() != null) {
                 materiaDb.getCursos().forEach(curso -> {
-                    if(curso.getMaterias() != null){
+                    if (curso.getMaterias() != null) {
                         curso.getMaterias().remove(materiaDb);
                     }
                 });
                 materiaDb.getCursos().clear();
             }
 
-            if (materiaDb.getProfesores() != null){
+            if (materiaDb.getProfesores() != null) {
                 materiaDb.getProfesores().forEach(profesor -> {
-                    if (profesor.getMateriasDictadas() != null){
+                    if (profesor.getMateriasDictadas() != null) {
                         profesor.getMateriasDictadas().remove(materiaDb);
                     }
                 });
@@ -119,6 +126,40 @@ public class MateriaServiceImpl implements MateriaService {
             }
 
             materiaBd.quitarProfesor(profOptional.get());
+            return Optional.of(repository.save(materiaBd));
+        }
+        return materOptional;
+    }
+
+    @Override
+    @Transactional
+    public Optional<Materia> agregarCurso(Long idMateria, Curso curso) {
+        Optional<Materia> materOptional = repository.findById(idMateria);
+        if (materOptional.isPresent()) {
+            Materia materiaBd = materOptional.get();
+            // Recuperar al curso
+            Optional<Curso> curOptional = repository3.findById(curso.getIdCurso());
+            if (curOptional.isEmpty()){
+                return Optional.empty();
+            }
+            materiaBd.agregarCurso(curOptional.get());
+            return Optional.of(repository.save(materiaBd));
+        }
+        return materOptional;
+    }
+
+    @Override
+    @Transactional
+    public Optional<Materia> quitarCurso(Long idMateria, Curso curso) {
+        Optional<Materia> materOptional = repository.findById(idMateria);
+        if (materOptional.isPresent()) {
+            Materia materiaBd = materOptional.get();
+            // Recuperar al curso
+            Optional<Curso> curOptional = repository3.findById(curso.getIdCurso());
+            if (curOptional.isEmpty()){
+                return Optional.empty();
+            }
+            materiaBd.quitarCurso(curOptional.get());
             return Optional.of(repository.save(materiaBd));
         }
         return materOptional;

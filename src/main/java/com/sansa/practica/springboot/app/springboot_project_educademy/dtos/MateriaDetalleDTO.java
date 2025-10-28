@@ -11,13 +11,18 @@ public class MateriaDetalleDTO {
     
     private Long idMateria;
     private String nombre;
-    private List<Curso> cursos;
+    private List<CursoResponseDTO> cursos;
     private List<ProfesorResponseDTO> profesores;
 
-    public MateriaDetalleDTO(Long idMateria, String nombre, List<Curso> cursos, Set<Profesor> profesores) {
+    public MateriaDetalleDTO(Long idMateria, String nombre, Set<Curso> cursos, Set<Profesor> profesores) {
         this.idMateria = idMateria;
         this.nombre = nombre;
-        this.cursos = cursos;
+        this.cursos = cursos.stream()
+        .map(c -> new CursoResponseDTO(
+            c.getIdCurso(),
+            c.getNroCurso(),
+            c.getDivisionCurso()))
+        .collect(Collectors.toList());
         //this.profesores = new ArrayList<>(profesores); //Asi se convierte de un set a un arrayList
         this.profesores = profesores.stream()
         .map(p -> new ProfesorResponseDTO(
@@ -40,7 +45,7 @@ public class MateriaDetalleDTO {
         return nombre;
     }
 
-    public List<Curso> getCursos() {
+    public List<CursoResponseDTO> getCursos() {
         return cursos;
     }
 

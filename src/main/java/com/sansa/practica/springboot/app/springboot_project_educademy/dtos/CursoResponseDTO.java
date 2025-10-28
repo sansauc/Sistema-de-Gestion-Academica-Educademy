@@ -1,6 +1,5 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
-//Se usa para crear un nuevo curso, sin las materias
 public class CursoResponseDTO {
 
     private Long idCurso;

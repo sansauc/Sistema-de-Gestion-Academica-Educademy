@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.CursoResponseDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaDetalleDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.MateriaInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorSimpleInfoDTO;
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Curso;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.MateriaService;
@@ -74,6 +76,8 @@ public class MateriaController {
         return ResponseEntity.notFound().build();
     }
 
+    // ----------------- Materia - Profesor -------------------//
+
     @PutMapping("/{id}/agregar-profesor")
     public ResponseEntity<?> agregarProfesor(@RequestBody ProfesorSimpleInfoDTO profesorDto, @PathVariable Long id) {
         Profesor profesor = converToEntityProfesor(profesorDto);
@@ -88,6 +92,17 @@ public class MateriaController {
     public ResponseEntity<?> quitarProfesor(@RequestBody ProfesorSimpleInfoDTO profesorDto, @PathVariable Long id) {
         Profesor profesor = converToEntityProfesor(profesorDto);
         Optional<Materia> materOptional = service.quitarProfesor(id, profesor);
+        if (materOptional.isPresent()) {
+            return ResponseEntity.ok(materOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // ----------------- Materia - Curso -------------------//
+    @PutMapping("/{id}/agregar-curso")
+    public ResponseEntity<?> agregarCurso(@RequestBody CursoResponseDTO cursoDTO, @PathVariable Long id){
+        Curso curso = convertToEntityCurso(cursoDTO);
+        Optional<Materia> materOptional = service.agregarCurso(id, curso);
         if (materOptional.isPresent()) {
             return ResponseEntity.ok(materOptional.orElseThrow());
         }
@@ -128,6 +143,14 @@ public class MateriaController {
         profesor.setProfesorId(dto.getProfesorId());
         profesor.setFechaIngreso(dto.getFechaIngreso());
         return profesor;
+    }
+
+    private Curso convertToEntityCurso(CursoResponseDTO dto){
+        Curso curso = new Curso();
+        curso.setIdCurso(dto.getIdCurso());
+        curso.setNroCurso(dto.getNroCurso());
+        curso.setDivisionCurso(dto.getDivisionCurso());
+        return curso;
     }
 
 }

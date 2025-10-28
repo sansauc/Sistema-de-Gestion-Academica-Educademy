@@ -1,7 +1,5 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,9 +22,10 @@ public class Materia {
     private Long idMateria;
     private String nombre;
 
+    @JsonIgnoreProperties({"materias", "handler", "hibernateLazyInitializer"})//Con esto se soluciona la recursión infinita en el JSON
     @ManyToMany
     @JoinTable(name = "materia_curso", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "curso_id"))
-    private List<Curso> cursos = new ArrayList<>();; // Para saber a que curso pertenece la materia
+    private Set<Curso> cursos; // Para saber a que curso pertenece la materia
 
     @JsonIgnoreProperties({"materiasDictadas", "handler", "hibernateLazyInitializer"})//Con esto se soluciona la recursión infinita en el JSON
     @ManyToMany
@@ -59,11 +58,11 @@ public class Materia {
         this.nombre = nombre;
     }
 
-    public List<Curso> getCursos() {
+    public Set<Curso> getCursos() {
         return cursos;
     }
 
-    public void setCursos(List<Curso> cursos) {
+    public void setCursos(Set<Curso> cursos) {
         this.cursos = cursos;
     }
 
@@ -90,6 +89,11 @@ public class Materia {
     public void agregarCurso(Curso curso) {
         this.cursos.add(curso);
         curso.getMaterias().add(this);
+    }
+
+    public void quitarCurso(Curso curso) {
+        this.cursos.remove(curso);
+        curso.getMaterias().remove(this);
     }
 
 }

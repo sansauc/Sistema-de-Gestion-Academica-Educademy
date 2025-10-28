@@ -59,7 +59,7 @@ public class CursoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
+    // ----- Eliminar ------//
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Curso> deleted = service.delete(id);
