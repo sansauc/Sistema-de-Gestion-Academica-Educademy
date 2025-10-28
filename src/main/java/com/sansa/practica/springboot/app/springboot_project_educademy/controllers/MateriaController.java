@@ -109,6 +109,16 @@ public class MateriaController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/{id}/quitar-curso")
+    public ResponseEntity<?> quitarCurso(@RequestBody CursoResponseDTO cursoDTO, @PathVariable Long id){
+        Curso curso = convertToEntityCurso(cursoDTO);
+        Optional<Materia> materOptional = service.quitarCurso(id, curso);
+        if (materOptional.isPresent()) {
+            return ResponseEntity.ok(materOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     // ----------- MÉTODOS DE CONVERSIÓN --------------
 
     private Materia convertToEntity(MateriaInfoDTO m){
