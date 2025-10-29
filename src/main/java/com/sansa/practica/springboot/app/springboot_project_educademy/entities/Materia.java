@@ -1,9 +1,12 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,14 +26,21 @@ public class Materia {
     private Long idMateria;
     private String nombre;
 
+    @OneToMany(mappedBy="materia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AlumnosXMaterias> alumnosInscriptos = new ArrayList();
+
     @JsonIgnoreProperties({"materias", "handler", "hibernateLazyInitializer"})//Con esto se soluciona la recursión infinita en el JSON
     @ManyToMany
-    @JoinTable(name = "materia_curso", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "curso_id"))
+    @JoinTable(name = "materia_curso", 
+        joinColumns = @JoinColumn(name = "materia_id"), 
+        inverseJoinColumns = @JoinColumn(name = "curso_id"))
     private Set<Curso> cursos; // Para saber a que curso pertenece la materia
 
     @JsonIgnoreProperties({"materiasDictadas", "handler", "hibernateLazyInitializer"})//Con esto se soluciona la recursión infinita en el JSON
     @ManyToMany
-    @JoinTable(name = "materia_profesor", joinColumns = @JoinColumn(name = "materia_id"), inverseJoinColumns = @JoinColumn(name = "profesor_id"))
+    @JoinTable(name = "materia_profesor", 
+        joinColumns = @JoinColumn(name = "materia_id"), 
+        inverseJoinColumns = @JoinColumn(name = "profesor_id"))
     private Set<Profesor> profesores; //Si usamos List, estamos obligados a controlar que el profesor no se haya guardado con anterioridad, usando set nos olvidamos
 
     public Materia() {

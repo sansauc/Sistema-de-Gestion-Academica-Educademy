@@ -17,7 +17,7 @@ public class Alumno extends Persona {
 
     private String studentId;
     
-    @OneToMany(mappedBy = "alumno", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "alumno", cascade = CascadeType.ALL, orphanRemoval = true)//"alumno" indica el nombre de la entidad en la otra clase
     private List<AlumnosXMaterias> materiasCursadas;
     
     private Date fechaInscripcion;
