@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,9 +15,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "alumnos_x_materias")
+@Table(name = "alumnos_x_materias", 
+       uniqueConstraints = @UniqueConstraint(
+        columnNames = {"alumno_id","materia_id","anio_cursado"}))
+       
 public class AlumnosXMaterias {
 
     @Id
@@ -31,6 +36,7 @@ public class AlumnosXMaterias {
     @JoinColumn(name = "materia_id")
     private Materia materia;
 
+    @Column(name = "anio_cursado")
     private int anioCursado;
 
     private String estado = "Cursando";
