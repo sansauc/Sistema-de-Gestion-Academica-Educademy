@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
+import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 
 //Devuelve información detallada de la cursada del alumno
@@ -20,11 +22,11 @@ public class AlumnosXMateriasDetalleDTO {
     public AlumnosXMateriasDetalleDTO() {
     }
 
-    public AlumnosXMateriasDetalleDTO(Long id, AlumnoResponseDTO alumno, MateriaInfoDTO materia, int anioCursado,
+    public AlumnosXMateriasDetalleDTO(Long id, Alumno alumno, Materia materia, int anioCursado,
             String estado, Double notaFinal, Set<Profesor> profesores) {
         this.id = id;
-        this.alumno = alumno;
-        this.materia = materia;
+        this.alumno = this.convertirAlumnoResponseDTO(alumno);
+        this.materia = this.convertirMateriaInfoDTO(materia);
         this.anioCursado = anioCursado;
         this.estado = estado;
         this.notaFinal = notaFinal;
@@ -98,6 +100,25 @@ public class AlumnosXMateriasDetalleDTO {
         this.profesores = profesores;
     }
 
-    
+    //Metodos de Conversion
+
+    private AlumnoResponseDTO convertirAlumnoResponseDTO(Alumno a){
+        return new AlumnoResponseDTO(
+            a.getId(),
+            a.getDni(),
+            a.getName(),
+            a.getLastname(),
+            a.getEmail(),
+            a.getBirthdate(),
+            a.getStudentId(),
+            a.getFechaInscripcion()
+        );
+    }
+
+    private MateriaInfoDTO convertirMateriaInfoDTO(Materia m){
+        return new MateriaInfoDTO(
+            m.getIdMateria(), 
+            m.getNombre());
+    }
 
 }

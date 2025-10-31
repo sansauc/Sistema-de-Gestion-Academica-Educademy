@@ -16,7 +16,7 @@ public class AlumnosXMateriasResponseDTO {
     }
 
     public AlumnosXMateriasResponseDTO(Long id, Long alumnoId, String alumnoNombre, Long materiaId,
-            String materiaNombre, int anioCursado, String estado) {
+            String materiaNombre, int anioCursado, String estado, Double notaFinal) {
 
         this.id = id;
         this.alumnoId = alumnoId;
@@ -25,6 +25,7 @@ public class AlumnosXMateriasResponseDTO {
         this.materiaNombre = materiaNombre;
         this.anioCursado = anioCursado;
         this.estado = estado;
+        this.notaFinal = notaFinal;
     }
 
     // Getters && Setters
