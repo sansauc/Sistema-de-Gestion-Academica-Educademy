@@ -2,43 +2,31 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 
 //Se utiliza para crear la cursada del alumno
 //Se crea sin la nota
 public class AlumnosXMateriasRequestDTO {
 
     private Long id;
-    private AlumnoResponseDTO alumno;
-    private MateriaInfoDTO materia;
+    private Long alumnoId;
+    private Long materiaId;
     private int anioCursado;
     private String estado;
     private Double notaFinal;
-    private Set<ProfesorResponseDTO> profesores = new HashSet<>();
+    private Set<Long> profesoresIds = new HashSet<>();
 
     public AlumnosXMateriasRequestDTO() {
     }
 
-    public AlumnosXMateriasRequestDTO(Long id, AlumnoResponseDTO alumno, MateriaInfoDTO materia, int anioCursado,
-            String estado, Set<Profesor> profesores) {
+    public AlumnosXMateriasRequestDTO(Long id, Long alumnoId, Long materiaId, int anioCursado,
+            String estado, Set<Long> profesoresIds) {
         this.id = id;
-        this.alumno = alumno;
-        this.materia = materia;
+        this.alumnoId = alumnoId;
+        this.materiaId = materiaId;
         this.anioCursado = anioCursado;
         this.estado = estado;
-        this.profesores = (Set<ProfesorResponseDTO>) profesores.stream()
-                .map(p -> new ProfesorResponseDTO(
-                        p.getId(),
-                        p.getDni(),
-                        p.getName(),
-                        p.getLastname(),
-                        p.getEmail(),
-                        p.getBirthdate(),
-                        p.getProfesorId(),
-                        p.getFechaIngreso()))
-                .collect(Collectors.toList());
+        this.profesoresIds = profesoresIds;
     }
 
     // Getters && Setters
@@ -51,20 +39,20 @@ public class AlumnosXMateriasRequestDTO {
         this.id = id;
     }
 
-    public AlumnoResponseDTO getAlumno() {
-        return alumno;
+    public Long getAlumnoId() {
+        return alumnoId;
     }
 
-    public void setAlumno(AlumnoResponseDTO alumno) {
-        this.alumno = alumno;
+    public void getAlumnoId(Long alumnoId) {
+        this.alumnoId = alumnoId;
     }
 
-    public MateriaInfoDTO getMateria() {
-        return materia;
+    public Long getMateriaId() {
+        return materiaId;
     }
 
-    public void setMateria(MateriaInfoDTO materia) {
-        this.materia = materia;
+    public void getMateriaId(Long materiaId) {
+        this.materiaId = materiaId;
     }
 
     public int getAnioCursado() {
@@ -92,12 +80,12 @@ public class AlumnosXMateriasRequestDTO {
         this.setEstado(notaFinal >= 4 ? "APROBADO" : "DESAPROBADO");
     }
 
-    public Set<ProfesorResponseDTO> getProfesores() {
-        return profesores;
+    public Set<Long> getProfesoresId() {
+        return profesoresIds;
     }
 
-    public void setProfesores(Set<ProfesorResponseDTO> profesores) {
-        this.profesores = profesores;
+    public void getProfesoresId(Set<Long> profesores) {
+        this.profesoresIds = profesores;
     }
 
 }

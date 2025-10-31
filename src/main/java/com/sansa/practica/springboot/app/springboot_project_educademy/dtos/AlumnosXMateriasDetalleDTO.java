@@ -40,7 +40,7 @@ public class AlumnosXMateriasDetalleDTO {
                         p.getBirthdate(),
                         p.getProfesorId(),
                         p.getFechaIngreso()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         ;
     }
 

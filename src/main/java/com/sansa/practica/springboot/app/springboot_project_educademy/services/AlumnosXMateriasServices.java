@@ -9,7 +9,7 @@ public interface AlumnosXMateriasServices {
 
     List<AlumnosXMaterias> findAll();
 
-    Optional<AlumnosXMaterias> findById();
+    Optional<AlumnosXMaterias> findById(Long id);
 
     AlumnosXMaterias save(AlumnosXMaterias alumnosXMaterias);
 
@@ -17,5 +17,5 @@ public interface AlumnosXMateriasServices {
     
     Optional<AlumnosXMaterias>  delete(Long id);
     
-    
+    Optional<AlumnosXMaterias> saveIfNotExists(AlumnosXMaterias alumnosXMaterias);
 }

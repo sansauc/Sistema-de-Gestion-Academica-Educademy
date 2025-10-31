@@ -23,7 +23,7 @@ public class Materia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMateria;
+    private Long id;
     private String nombre;
 
     @OneToMany(mappedBy="materia", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -47,18 +47,18 @@ public class Materia {
     }
 
     public Materia(Long idMateria, String nombre) {
-        this.idMateria = idMateria;
+        this.id = idMateria;
         this.nombre = nombre;
     }
 
     // Getters && Setters
 
     public Long getIdMateria() {
-        return idMateria;
+        return id;
     }
 
     public void setIdMateria(Long idMateria) {
-        this.idMateria = idMateria;
+        this.id = idMateria;
     }
 
     public String getNombre() {
