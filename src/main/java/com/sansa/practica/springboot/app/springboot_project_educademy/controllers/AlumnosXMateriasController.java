@@ -1,5 +1,6 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,9 +22,10 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.entities.A
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.AlumnosXMateriasServices;
+import com.sansa.practica.springboot.app.springboot_project_educademy.services.MateriaService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 
 @RestController
 @RequestMapping("/api/cursada")
@@ -31,6 +33,9 @@ public class AlumnosXMateriasController {
 
     @Autowired
     private AlumnosXMateriasServices service;
+
+    @Autowired
+    private MateriaService serviceMateria;
 
     // --------------- LISTAR ----------------------
 
@@ -45,9 +50,9 @@ public class AlumnosXMateriasController {
     // --------------- VER EN DETALLE ----------------------
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> view(@PathVariable Long id){
+    public ResponseEntity<?> view(@PathVariable Long id) {
         Optional<AlumnosXMaterias> alumnoXMateriaOptional = service.findById(id);
-        if(alumnoXMateriaOptional.isPresent()){
+        if (alumnoXMateriaOptional.isPresent()) {
             AlumnosXMaterias axm = alumnoXMateriaOptional.get();
             AlumnosXMateriasDetalleDTO dto = this.convertToAlumnosXMateriasDetalleDTO(axm);
             return ResponseEntity.ok(dto);
@@ -58,21 +63,21 @@ public class AlumnosXMateriasController {
     // --------------- CREAR ----------------------
 
     @PostMapping
-    public ResponseEntity<?> create (@RequestBody AlumnosXMateriasRequestDTO dto) {
+    public ResponseEntity<?> create(@RequestBody AlumnosXMateriasRequestDTO dto) {
 
         AlumnosXMaterias alumnoXMateria = this.convertToEntity(dto);
 
         Optional<AlumnosXMaterias> saved = service.saveIfNotExists(alumnoXMateria);
-        
-        if(saved.isPresent()){
+
+        if (saved.isPresent()) {
             AlumnosXMateriasResponseDTO response = this.convertTAlumnosXMateriasResponseDTO(saved.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        }else{
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe la relación alumno - materia para el año: "+dto.getAnioCursado());
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Ya existe la relación alumno - materia para el año: " + dto.getAnioCursado());
         }
 
     }
-    
 
     // Métodos de Conversión
 
@@ -82,32 +87,50 @@ public class AlumnosXMateriasController {
 
         alumnoXMateria.setId(axm.getId());
 
-        //JPA/Hibernate necesita objetos entidad completos (aunque sea solo con el ID) para manejar correctamente las relaciones, no solo los IDs primitivos.
-        if(axm.getAlumnoId()!=null){
+        // JPA/Hibernate necesita objetos entidad completos (aunque sea solo con el ID)
+        // para manejar correctamente las relaciones, no solo los IDs primitivos.
+        if (axm.getAlumnoId() != null) {
             Alumno alumno = new Alumno();
             alumno.setId(axm.getAlumnoId());
             alumnoXMateria.setAlumno(alumno);
         }
 
-        if(axm.getMateriaId() != null){
-            Materia materia = new Materia();
-            materia.setIdMateria(axm.getMateriaId());
+        // Cargar la materia completa desde BD (para obtener sus profesores)
+
+        if (axm.getMateriaId() != null) {
+            Materia materia = serviceMateria.findById(axm.getMateriaId())
+                    .orElseThrow(() -> new RuntimeException("Materia no encontrada con ID: " + axm.getMateriaId()));
+
             alumnoXMateria.setMateria(materia);
+            
+            //Hay una doble condicion porque si el Set es null, intentar llamar a .isEmpty() lanzaría un NullPointerException.
+            if (materia.getProfesores() != null && !materia.getProfesores().isEmpty()) {
+                alumnoXMateria.setProfesores(new HashSet<>(materia.getProfesores()));
+            }
         }
 
+        // if(axm.getMateriaId() != null){
+        // Materia materia = new Materia();
+        // materia.setIdMateria(axm.getMateriaId());
+        // alumnoXMateria.setMateria(materia);
+        // }
+
         alumnoXMateria.setAnioCursado(axm.getAnioCursado());
-        
-        //Convertir IDs a entidades Profesor 
-        if(axm.getProfesoresId() != null){
-            Set<Profesor> profesores = axm.getProfesoresId().stream()
-                .map(id -> {
-                    Profesor profesor = new Profesor();
-                    profesor.setId(id);
-                    return profesor;
-                })
-                .collect(Collectors.toSet());
-            alumnoXMateria.setProfesores(profesores);
-        }
+
+        // Aca hay que cargar los profesores que van a dictar la materia con la lista de
+        // profesores que ya tiene cargado la materia
+
+        // Convertir IDs a entidades Profesor
+        // if(axm.getProfesoresId() != null){
+        // Set<Profesor> profesores = axm.getProfesoresId().stream()
+        // .map(id -> {
+        // Profesor profesor = new Profesor();
+        // profesor.setId(id);
+        // return profesor;
+        // })
+        // .collect(Collectors.toSet());
+        // alumnoXMateria.setProfesores(profesores);
+        // }
 
         alumnoXMateria.setEstado("Cursando");
 
