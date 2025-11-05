@@ -83,7 +83,7 @@ public class AlumnosXMateriasController {
 
         AlumnosXMaterias alumnoXMateria = new AlumnosXMaterias();
 
-        alumnoXMateria.setId(axm.getId());
+        //alumnoXMateria.setId(axm.getId());
 
         // JPA/Hibernate necesita objetos entidad completos (aunque sea solo con el ID)
         // para manejar correctamente las relaciones, no solo los IDs primitivos.
