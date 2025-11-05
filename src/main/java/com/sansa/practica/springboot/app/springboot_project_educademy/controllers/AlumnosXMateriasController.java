@@ -3,7 +3,6 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.controlle
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.Alumn
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.AlumnosXMaterias;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Materia;
-import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.AlumnosXMateriasServices;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.MateriaService;
 
