@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AgregarCursadaDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnosXMateriasDetalleDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnosXMateriasRequestDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnosXMateriasResponseDTO;
@@ -61,14 +62,15 @@ public class AlumnosXMateriasController {
     // --------------- CREAR ----------------------
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AlumnosXMateriasRequestDTO dto) {
+    public ResponseEntity<?> create(@RequestBody AgregarCursadaDTO dto) {
 
-        AlumnosXMaterias alumnoXMateria = this.convertToEntity(dto);
+        AlumnosXMaterias alumnoXMateria = this.convertToEntity2(dto);
 
         Optional<AlumnosXMaterias> saved = service.saveIfNotExists(alumnoXMateria);
 
         if (saved.isPresent()) {
             AlumnosXMateriasResponseDTO response = this.convertTAlumnosXMateriasResponseDTO(saved.get());
+            System.out.println("nomre del alumno: "+ saved.get().getAlumno().getName() + " Apellido del alumno: " + saved.get().getAlumno().getLastname());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -77,63 +79,94 @@ public class AlumnosXMateriasController {
 
     }
 
-    // Métodos de Conversión
+    // // Métodos de Conversión
 
-    private AlumnosXMaterias convertToEntity(AlumnosXMateriasRequestDTO axm) {
+    // private AlumnosXMaterias convertToEntity(AlumnosXMateriasRequestDTO axm) {
+
+    //     AlumnosXMaterias alumnoXMateria = new AlumnosXMaterias();
+
+    //     // alumnoXMateria.setId(axm.getId());
+
+    //     // JPA/Hibernate necesita objetos entidad completos (aunque sea solo con el ID)
+    //     // para manejar correctamente las relaciones, no solo los IDs primitivos.
+    //     if (axm.getAlumnoId() != null) {
+    //         Alumno alumno = new Alumno();
+    //         alumno.setId(axm.getAlumnoId());
+    //         alumnoXMateria.setAlumno(alumno);
+    //     }
+
+    //     // Cargar la materia completa desde BD (para obtener sus profesores)
+
+    //     if (axm.getMateriaId() != null) {
+    //         Materia materia = serviceMateria.findById(axm.getMateriaId())
+    //                 .orElseThrow(() -> new RuntimeException("Materia no encontrada con ID: " + axm.getMateriaId()));
+
+    //         alumnoXMateria.setMateria(materia);
+
+    //         // Hay una doble condicion porque si el Set es null, intentar llamar a
+    //         // .isEmpty() lanzaría un NullPointerException.
+    //         if (materia.getProfesores() != null && !materia.getProfesores().isEmpty()) {
+    //             alumnoXMateria.setProfesores(new HashSet<>(materia.getProfesores()));
+    //         }
+    //     }
+
+    //     // if(axm.getMateriaId() != null){
+    //     // Materia materia = new Materia();
+    //     // materia.setIdMateria(axm.getMateriaId());
+    //     // alumnoXMateria.setMateria(materia);
+    //     // }
+
+    //     alumnoXMateria.setAnioCursado(axm.getAnioCursado());
+
+    //     // Aca hay que cargar los profesores que van a dictar la materia con la lista de
+    //     // profesores que ya tiene cargado la materia
+
+    //     // Convertir IDs a entidades Profesor
+    //     // if(axm.getProfesoresId() != null){
+    //     // Set<Profesor> profesores = axm.getProfesoresId().stream()
+    //     // .map(id -> {
+    //     // Profesor profesor = new Profesor();
+    //     // profesor.setId(id);
+    //     // return profesor;
+    //     // })
+    //     // .collect(Collectors.toSet());
+    //     // alumnoXMateria.setProfesores(profesores);
+    //     // }
+
+    //     alumnoXMateria.setEstado("Cursando");
+
+    //     return alumnoXMateria;
+
+    // }
+
+    private AlumnosXMaterias convertToEntity2(AgregarCursadaDTO axm) {
 
         AlumnosXMaterias alumnoXMateria = new AlumnosXMaterias();
 
-        //alumnoXMateria.setId(axm.getId());
-
-        // JPA/Hibernate necesita objetos entidad completos (aunque sea solo con el ID)
-        // para manejar correctamente las relaciones, no solo los IDs primitivos.
         if (axm.getAlumnoId() != null) {
             Alumno alumno = new Alumno();
             alumno.setId(axm.getAlumnoId());
             alumnoXMateria.setAlumno(alumno);
         }
 
-        // Cargar la materia completa desde BD (para obtener sus profesores)
-
         if (axm.getMateriaId() != null) {
             Materia materia = serviceMateria.findById(axm.getMateriaId())
                     .orElseThrow(() -> new RuntimeException("Materia no encontrada con ID: " + axm.getMateriaId()));
 
             alumnoXMateria.setMateria(materia);
-            
-            //Hay una doble condicion porque si el Set es null, intentar llamar a .isEmpty() lanzaría un NullPointerException.
+
+            // Hay una doble condicion porque si el Set es null, intentar llamar a
+            // .isEmpty() lanzaría un NullPointerException.
             if (materia.getProfesores() != null && !materia.getProfesores().isEmpty()) {
                 alumnoXMateria.setProfesores(new HashSet<>(materia.getProfesores()));
             }
         }
-
-        // if(axm.getMateriaId() != null){
-        // Materia materia = new Materia();
-        // materia.setIdMateria(axm.getMateriaId());
-        // alumnoXMateria.setMateria(materia);
-        // }
-
+        
         alumnoXMateria.setAnioCursado(axm.getAnioCursado());
-
-        // Aca hay que cargar los profesores que van a dictar la materia con la lista de
-        // profesores que ya tiene cargado la materia
-
-        // Convertir IDs a entidades Profesor
-        // if(axm.getProfesoresId() != null){
-        // Set<Profesor> profesores = axm.getProfesoresId().stream()
-        // .map(id -> {
-        // Profesor profesor = new Profesor();
-        // profesor.setId(id);
-        // return profesor;
-        // })
-        // .collect(Collectors.toSet());
-        // alumnoXMateria.setProfesores(profesores);
-        // }
-
+        
         alumnoXMateria.setEstado("Cursando");
-
+        
         return alumnoXMateria;
-
     }
 
     private AlumnosXMateriasDetalleDTO convertToAlumnosXMateriasDetalleDTO(AlumnosXMaterias axm) {

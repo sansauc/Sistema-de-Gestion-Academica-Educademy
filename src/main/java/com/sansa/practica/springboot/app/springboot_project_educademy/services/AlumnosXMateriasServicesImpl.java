@@ -89,6 +89,9 @@ public class AlumnosXMateriasServicesImpl implements AlumnosXMateriasServices {
             if (existingRelation.isPresent()) {
                 return Optional.empty(); // Relación duplicada
             }
+            
+            alumnosXMaterias.setAlumno(alumno);
+            alumnosXMaterias.setMateria(materia);
 
             if (alumnosXMaterias.getEstado() == null) {
                 alumnosXMaterias.setEstado("Cursando");
