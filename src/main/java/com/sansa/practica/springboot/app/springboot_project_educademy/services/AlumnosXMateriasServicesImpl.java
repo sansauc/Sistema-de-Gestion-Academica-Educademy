@@ -49,7 +49,7 @@ public class AlumnosXMateriasServicesImpl implements AlumnosXMateriasServices {
     //Listar las inscripciones de un alumno
     @Override
     public List<AlumnosXMaterias> findByStudentId(String studentId) {
-        return (List<AlumnosXMaterias>) repository.findByStudentId(studentId);
+        return (List<AlumnosXMaterias>) repository.findByAlumno_StudentId(studentId);//Esto se hace para acceder al campo studentid del atributo alumno
     }
 
     @Override

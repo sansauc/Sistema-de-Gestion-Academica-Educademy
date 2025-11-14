@@ -19,6 +19,6 @@ public interface AlumnosXMateriasRepository extends CrudRepository<AlumnosXMater
 
     List<AlumnosXMaterias> findByAnioCursado(int anioCursado);
 
-    List<AlumnosXMaterias> findByStudentId(String studentId);
+    List<AlumnosXMaterias> findByAlumno_StudentId(String studentId);;
 
 }

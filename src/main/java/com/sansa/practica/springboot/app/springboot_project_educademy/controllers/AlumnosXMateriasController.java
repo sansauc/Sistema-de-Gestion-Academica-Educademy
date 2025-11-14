@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AgregarCursadaDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnosXMateriasDetalleDTO;
-import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnosXMateriasRequestDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.AlumnosXMateriasResponseDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.AlumnosXMaterias;
