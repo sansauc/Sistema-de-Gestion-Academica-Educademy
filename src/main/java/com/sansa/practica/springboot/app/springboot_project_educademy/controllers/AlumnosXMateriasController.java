@@ -138,6 +138,22 @@ public class AlumnosXMateriasController {
     //     return alumnoXMateria;
 
     // }
+    //------------------ Listar Cursadas de un alumno ------------------------
+    @GetMapping("/alumno/{studentId}")
+    public ResponseEntity<?> getCursadasByAlumno(@PathVariable String studentId){
+        List<AlumnosXMaterias> materiasCursadas = service.findByStudentId(studentId);
+        if(materiasCursadas.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("El alumno no tiene materias cursadas o no existe el id del alumno.");
+        }
+        List<AlumnosXMateriasResponseDTO> response = materiasCursadas.stream()
+                .map(this::convertTAlumnosXMateriasResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+
+    // ----------------- Métodos de Conversión -------------------------------
 
     private AlumnosXMaterias convertToEntity2(AgregarCursadaDTO axm) {
 

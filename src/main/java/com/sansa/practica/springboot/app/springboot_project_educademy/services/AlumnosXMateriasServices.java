@@ -10,7 +10,9 @@ public interface AlumnosXMateriasServices {
     List<AlumnosXMaterias> findAll();
 
     Optional<AlumnosXMaterias> findById(Long id);
-
+    
+    List<AlumnosXMaterias> findByStudentId(String studentId);
+    
     AlumnosXMaterias save(AlumnosXMaterias alumnosXMaterias);
 
     Optional<AlumnosXMaterias> update(Long id, AlumnosXMaterias alumnosXMaterias);

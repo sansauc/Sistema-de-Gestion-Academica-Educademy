@@ -46,6 +46,12 @@ public class AlumnosXMateriasServicesImpl implements AlumnosXMateriasServices {
         return repository.save(alumnosXMaterias);
     }
 
+    //Listar las inscripciones de un alumno
+    @Override
+    public List<AlumnosXMaterias> findByStudentId(String studentId) {
+        return (List<AlumnosXMaterias>) repository.findByStudentId(studentId);
+    }
+
     @Override
     public Optional<AlumnosXMaterias> update(Long id, AlumnosXMaterias alumnosXMaterias) {
         // TODO Auto-generated method stub
@@ -105,5 +111,6 @@ public class AlumnosXMateriasServicesImpl implements AlumnosXMateriasServices {
             throw e;
         }
     }
+
 
 }
