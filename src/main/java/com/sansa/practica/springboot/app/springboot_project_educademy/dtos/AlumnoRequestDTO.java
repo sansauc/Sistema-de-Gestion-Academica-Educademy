@@ -2,18 +2,39 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 //Esta clase se usa para crear y actualizar alumnos
 public class AlumnoRequestDTO {
 
     //Atributos de la persona
+    @Min(500)
+    @NotNull
     private Long dni;
+    
+    @NotEmpty //Este se usa para validar String vacios
+    @Size(min = 3, max = 20)
     private String name;
+    
+    @NotEmpty
     private String lastname;
+    
+    @NotEmpty
+    @Email(message = "Formato de email inválido") //Tambien se podria utilizar: @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$") Esto te permite utilizar emails internos del tipo: usuario@local
     private String email;
+    
+    @NotNull //Para fechas
     private Date birthdate;
 
     //Atributos propios del alumno
+    @NotEmpty 
     private String studentId;
+
+    @NotNull
     private Date fechaInscripcion;
 
     

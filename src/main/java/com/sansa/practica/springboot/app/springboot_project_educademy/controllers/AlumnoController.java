@@ -23,6 +23,8 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.Alumn
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Alumno;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.AlumnoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/alumnos")
 public class AlumnoController {
@@ -87,7 +89,7 @@ public class AlumnoController {
     // Crear con Dto
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AlumnoRequestDTO alumnoDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody AlumnoRequestDTO alumnoDTO) {
         Alumno alumno = convertToEntity(alumnoDTO);
         Optional<Alumno> saved = service.saveIfNotExists(alumno);
         if (saved.isPresent()) {
