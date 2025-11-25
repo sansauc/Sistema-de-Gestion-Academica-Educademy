@@ -1,12 +1,15 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -88,8 +91,13 @@ public class AlumnoController {
 
     // Crear con Dto
 
+    // BindingResult result, se usa para setear el json que devuelve el error de
+    // validacion, siempre va al lado del objeto que se valida
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody AlumnoRequestDTO alumnoDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody AlumnoRequestDTO alumnoDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            return validation(result);
+        }
         Alumno alumno = convertToEntity(alumnoDTO);
         Optional<Alumno> saved = service.saveIfNotExists(alumno);
         if (saved.isPresent()) {
@@ -118,7 +126,11 @@ public class AlumnoController {
      */// Esto sirve, metodo sin dto
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody AlumnoRequestDTO alumnoDTO) {
+    public ResponseEntity<?> update(@RequestBody AlumnoRequestDTO alumnoDTO, BindingResult result,
+            @PathVariable Long id) {
+        if (result.hasErrors()) {
+            return validation(result);
+        }
         Alumno alumno = convertToEntity(alumnoDTO);
         Optional<Alumno> updated = service.update(id, alumno);
         if (updated.isPresent()) {
@@ -140,7 +152,7 @@ public class AlumnoController {
      * return ResponseEntity.notFound().build();
      * }
      */// Esto sirve, metodo sin dto
-     
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Alumno> deleted = service.delete(id);
@@ -191,5 +203,17 @@ public class AlumnoController {
                 a.getBirthdate(),
                 a.getStudentId(),
                 a.getFechaInscripcion());
+    }
+
+    // Metodo que controla la validacion
+
+    private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>(); // map<nombre del atributo, mensaje de error>
+
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo: " + err.getField() + " " + err.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
     }
 }
