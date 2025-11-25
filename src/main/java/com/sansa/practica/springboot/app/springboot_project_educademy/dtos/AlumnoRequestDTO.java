@@ -4,6 +4,7 @@ import java.util.Date;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,11 +17,12 @@ public class AlumnoRequestDTO {
     @NotNull
     private Long dni;
     
-    @NotEmpty //Este se usa para validar String vacios
+    @NotEmpty(message = "{NotEmpty.AlumnoRequestDTO.name}") //Este se usa para validar String vacios
     @Size(min = 3, max = 20)
     private String name;
     
     @NotEmpty
+    @Size(min = 3, max = 20)
     private String lastname;
     
     @NotEmpty
@@ -31,7 +33,7 @@ public class AlumnoRequestDTO {
     private Date birthdate;
 
     //Atributos propios del alumno
-    @NotEmpty 
+    @NotBlank(message = "{NotBlank.AlumnoRequestDTO.studentId}")
     private String studentId;
 
     @NotNull
