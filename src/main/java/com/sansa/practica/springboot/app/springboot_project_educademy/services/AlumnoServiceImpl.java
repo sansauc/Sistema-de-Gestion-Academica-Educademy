@@ -63,13 +63,13 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     public Optional<Alumno> saveIfNotExists(Alumno alumno) {
-        
+
         // Validar duplicado por dni
         Optional<Alumno> existingByDni = repository.findByDni(alumno.getDni());
         if (existingByDni.isPresent()) {
             return Optional.empty(); // ya existe alumno con ese email
         }
-        
+
         // Validar duplicado por email
         Optional<Alumno> existingByEmail = repository.findByEmail(alumno.getEmail());
         if (existingByEmail.isPresent()) {
@@ -84,6 +84,23 @@ public class AlumnoServiceImpl implements AlumnoService {
 
         Alumno saved = repository.save(alumno);
         return Optional.of(saved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByDni(Long dni) {
+        return repository.existsByDni(dni);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByStudentId(String studentId) {
+        return repository.existsByStudentId(studentId);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
     }
 
 }

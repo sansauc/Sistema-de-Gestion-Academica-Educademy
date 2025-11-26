@@ -2,6 +2,10 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.isExistDniDb;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.isExistEmailDB;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.isExistStudentIdDB;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +19,7 @@ public class AlumnoRequestDTO {
     //Atributos de la persona
     @Min(500)
     @NotNull
+    @isExistDniDb
     private Long dni;
     
     @NotEmpty(message = "{NotEmpty.AlumnoRequestDTO.name}") //Este se usa para validar String vacios
@@ -27,6 +32,7 @@ public class AlumnoRequestDTO {
     
     @NotEmpty
     @Email(message = "Formato de email inválido") //Tambien se podria utilizar: @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$") Esto te permite utilizar emails internos del tipo: usuario@local
+    @isExistEmailDB
     private String email;
     
     @NotNull //Para fechas
@@ -34,6 +40,7 @@ public class AlumnoRequestDTO {
 
     //Atributos propios del alumno
     @NotBlank(message = "{NotBlank.AlumnoRequestDTO.studentId}")
+    @isExistStudentIdDB
     private String studentId;
 
     @NotNull

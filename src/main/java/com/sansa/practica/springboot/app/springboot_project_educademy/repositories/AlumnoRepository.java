@@ -15,4 +15,10 @@ public interface AlumnoRepository extends CrudRepository <Alumno, Long> {
     
     Optional<Alumno> findByStudentId(String studentId);
 
+    boolean existsByDni(Long dni);
+    
+    boolean existsByStudentId(String studentId);
+
+    boolean existsByEmail(String email);
+
 }

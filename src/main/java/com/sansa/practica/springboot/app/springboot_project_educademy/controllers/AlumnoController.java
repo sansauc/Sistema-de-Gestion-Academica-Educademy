@@ -110,6 +110,11 @@ public class AlumnoController {
         }
     }
 
+    // Crear con Dto utilizando los validadores personalizados directamente con la base de datos
+
+    // BindingResult result, se usa para setear el json que devuelve el error de
+    // validacion, siempre va al lado del objeto que se valida
+
     // --------------- ACTUALIZAR ----------------------
 
     /*

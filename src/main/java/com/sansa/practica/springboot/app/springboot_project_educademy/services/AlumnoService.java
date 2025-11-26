@@ -19,4 +19,10 @@ public interface AlumnoService {
 
     Optional<Alumno> saveIfNotExists(Alumno alumno);
 
+    boolean existsByDni(Long dni);
+
+    boolean existsByStudentId(String studentId);
+
+    boolean existsByEmail(String email);
+
 }
