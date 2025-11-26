@@ -12,7 +12,7 @@ import jakarta.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface isExistStudentIdDB {
-    String message() default "Ya existe un alumno con este StudentId";
+    String message() default "ya existe en la base de datos";
 
     Class<?>[] groups() default {};
 

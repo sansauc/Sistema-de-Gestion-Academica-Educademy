@@ -12,7 +12,7 @@ import jakarta.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface isExistDniDb {
-    String message() default "Ya existe un alumno con este DNI";
+    String message() default "ya existe en la base de datos";
 
     Class<?>[] groups() default {};
 

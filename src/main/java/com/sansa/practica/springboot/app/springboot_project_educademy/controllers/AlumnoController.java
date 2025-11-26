@@ -93,28 +93,37 @@ public class AlumnoController {
 
     // BindingResult result, se usa para setear el json que devuelve el error de
     // validacion, siempre va al lado del objeto que se valida
+    // @PostMapping
+    // public ResponseEntity<?> create(@Valid @RequestBody AlumnoRequestDTO
+    // alumnoDTO, BindingResult result) {
+    // if (result.hasErrors()) {
+    // return validation(result);
+    // }
+    // Alumno alumno = convertToEntity(alumnoDTO);
+    // Optional<Alumno> saved = service.saveIfNotExists(alumno);
+    // if (saved.isPresent()) {
+    // AlumnoResponseDTO response = convertToResponseDTO(saved.get());
+    // return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    // } else {
+    // return ResponseEntity
+    // .status(HttpStatus.CONFLICT)
+    // .body("Ya existe un alumno con el mismo email o studentId");
+    // }
+    // }
+
+    // Crear con Dto utilizando los validadores personalizados directamente con la
+    // base de datos
+
+    // BindingResult result, se usa para setear el json que devuelve el error de
+    // validacion, siempre va al lado del objeto que se valida
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody AlumnoRequestDTO alumnoDTO, BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }
         Alumno alumno = convertToEntity(alumnoDTO);
-        Optional<Alumno> saved = service.saveIfNotExists(alumno);
-        if (saved.isPresent()) {
-            AlumnoResponseDTO response = convertToResponseDTO(saved.get());
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body("Ya existe un alumno con el mismo email o studentId");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(alumno));
     }
-
-    // Crear con Dto utilizando los validadores personalizados directamente con la base de datos
-
-    // BindingResult result, se usa para setear el json que devuelve el error de
-    // validacion, siempre va al lado del objeto que se valida
-
     // --------------- ACTUALIZAR ----------------------
 
     /*
@@ -130,6 +139,9 @@ public class AlumnoController {
      * }
      */// Esto sirve, metodo sin dto
 
+    //Se debiera implementar un dto exclusivamente para borrar datos y sobre ese dto aplicar las anotaciones de validaciones,
+    //si usamos el mismo del create, te obliga a incorporar campos, y al dni ser igual a uno que ya existe en la base de datos
+    //la validacion falla.
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody AlumnoRequestDTO alumnoDTO, BindingResult result,
             @PathVariable Long id) {
