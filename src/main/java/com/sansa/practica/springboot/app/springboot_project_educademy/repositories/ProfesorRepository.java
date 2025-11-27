@@ -13,4 +13,10 @@ public interface ProfesorRepository extends CrudRepository<Profesor, Long> {
     Optional<Profesor> findByEmail(String email);
 
     Optional<Profesor> findByDni(Long dni);
+
+    boolean existsByDni(Long dni);
+
+    boolean existsByProfesorId(String profesorId);
+
+    boolean existsByEmail(String email);
 }

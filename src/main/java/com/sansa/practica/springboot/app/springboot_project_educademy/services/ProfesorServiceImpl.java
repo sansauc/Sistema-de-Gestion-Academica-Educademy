@@ -11,7 +11,7 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.entities.P
 import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.ProfesorRepository;
 
 @Service
-public class ProfesorServiceImpl implements ProfesorService{
+public class ProfesorServiceImpl implements ProfesorService {
 
     @Autowired
     private ProfesorRepository repository;
@@ -20,7 +20,7 @@ public class ProfesorServiceImpl implements ProfesorService{
     @Override
     public List<Profesor> findAll() {
         return (List<Profesor>) repository.findAll();
-    
+
     }
 
     @Transactional(readOnly = true)
@@ -32,14 +32,14 @@ public class ProfesorServiceImpl implements ProfesorService{
     @Override
     @Transactional
     public Profesor save(Profesor profesor) {
-       return repository.save(profesor);
+        return repository.save(profesor);
     }
-    
+
     @Override
     @Transactional
     public Optional<Profesor> update(Long id, Profesor profesor) {
         Optional<Profesor> profOptional = repository.findById(id);
-        if(profOptional.isPresent()){
+        if (profOptional.isPresent()) {
             Profesor profDB = profOptional.get();
             profDB.setName(profesor.getName());
             profDB.setLastname(profesor.getLastname());
@@ -64,12 +64,12 @@ public class ProfesorServiceImpl implements ProfesorService{
 
     @Override
     public Optional<Profesor> saveIfNotExists(Profesor profesor) {
-              // Validar duplicado por dni
+        // Validar duplicado por dni
         Optional<Profesor> existingByDni = repository.findByDni(profesor.getDni());
         if (existingByDni.isPresent()) {
             return Optional.empty(); // ya existe profesor con ese email
         }
-        
+
         // Validar duplicado por email
         Optional<Profesor> existingByEmail = repository.findByEmail(profesor.getEmail());
         if (existingByEmail.isPresent()) {
@@ -79,11 +79,28 @@ public class ProfesorServiceImpl implements ProfesorService{
         // Validar duplicado por profesorID
         Optional<Profesor> existingByStudentId = repository.findByProfesorId(profesor.getProfesorId());
         if (existingByStudentId.isPresent()) {
-            return Optional.empty(); // ya existe profesor con ese ID 
+            return Optional.empty(); // ya existe profesor con ese ID
         }
 
         Profesor saved = repository.save(profesor);
         return Optional.of(saved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByDni(Long dni) {
+       return repository.existsByDni(dni);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByProfesorId(String profesorId) {
+        return repository.existsByProfesorId(profesorId);
     }
 
 }

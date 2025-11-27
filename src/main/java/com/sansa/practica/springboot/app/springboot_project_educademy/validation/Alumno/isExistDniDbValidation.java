@@ -1,4 +1,4 @@
-package com.sansa.practica.springboot.app.springboot_project_educademy.validation;
+package com.sansa.practica.springboot.app.springboot_project_educademy.validation.Alumno;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

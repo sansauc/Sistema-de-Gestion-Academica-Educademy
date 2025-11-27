@@ -1,4 +1,4 @@
-package com.sansa.practica.springboot.app.springboot_project_educademy.validation;
+package com.sansa.practica.springboot.app.springboot_project_educademy.validation.Profesor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,7 +11,7 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = isExistDniDbValidation.class) //la clase validadora
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface isExistDniDb {
+public @interface isExistDniDB {
     String message() default "ya existe en la base de datos";
 
     Class<?>[] groups() default {};

@@ -1,4 +1,4 @@
-package com.sansa.practica.springboot.app.springboot_project_educademy.validation;
+package com.sansa.practica.springboot.app.springboot_project_educademy.validation.Alumno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

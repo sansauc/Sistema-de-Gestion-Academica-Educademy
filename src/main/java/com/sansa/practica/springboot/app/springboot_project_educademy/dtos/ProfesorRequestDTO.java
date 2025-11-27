@@ -2,17 +2,47 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
 
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.Profesor.isExistDniDB;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.Profesor.isExistEmailDb;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.Profesor.isExistProfesorIdDb;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class ProfesorRequestDTO {
 
     // Atributos heredados de Persona
+    @Min(500)
+    @NotNull
+    @isExistDniDB
     private Long dni;
+
+    @NotEmpty(message = "El nombre no debe estar vacio!") // Este se usa para validar String vacios
+    @Size(min = 3, max = 20)
     private String name;
+
+    @NotEmpty(message = "El apellido no debe estar vacio!") // Este se usa para validar String vacios
+    @Size(min = 3, max = 20)
     private String lastname;
+
+    @NotEmpty
+    @Email(message = "Formato de email inválido") // Tambien se podria utilizar: @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$") Esto te permite utilizar emails internos del tipo: usuario@local
+    @isExistEmailDb
     private String email;
+
+    @NotNull //Para fechas
     private Date birthdate;
 
     // Atributos específicos del profesor
+    @NotBlank(message = "El profesorID no debe estar vacio")
+    @isExistProfesorIdDb
     private String profesorID;
+
+    @NotNull
     private Date fechaIngreso;
 
     public ProfesorRequestDTO() {

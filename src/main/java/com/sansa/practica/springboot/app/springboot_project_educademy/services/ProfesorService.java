@@ -19,4 +19,10 @@ public interface ProfesorService {
 
     Optional<Profesor> saveIfNotExists(Profesor profesor);
 
+    boolean existsByDni(Long dni);
+
+    boolean existsByProfesorId(String profesorId);
+
+    boolean existsByEmail(String email);
+
 }

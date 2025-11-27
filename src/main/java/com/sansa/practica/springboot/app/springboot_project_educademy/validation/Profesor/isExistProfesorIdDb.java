@@ -1,4 +1,4 @@
-package com.sansa.practica.springboot.app.springboot_project_educademy.validation;
+package com.sansa.practica.springboot.app.springboot_project_educademy.validation.Profesor;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-@Constraint(validatedBy = isExistEmailDBValidation.class)
+@Constraint(validatedBy = isExistProfesorIdValidation.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface isExistEmailDB {
+public @interface isExistProfesorIdDb {
     String message() default "ya existe en la base de datos";
 
     Class<?>[] groups() default {};

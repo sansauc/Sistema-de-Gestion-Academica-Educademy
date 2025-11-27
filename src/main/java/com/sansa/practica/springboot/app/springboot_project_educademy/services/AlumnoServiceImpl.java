@@ -99,6 +99,7 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
         return repository.existsByEmail(email);
     }

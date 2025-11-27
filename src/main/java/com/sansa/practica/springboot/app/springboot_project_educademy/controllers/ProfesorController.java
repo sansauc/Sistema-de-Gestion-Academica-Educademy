@@ -1,12 +1,15 @@
 package com.sansa.practica.springboot.app.springboot_project_educademy.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,8 @@ import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.Profe
 import com.sansa.practica.springboot.app.springboot_project_educademy.dtos.ProfesorSimpleInfoDTO;
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.Profesor;
 import com.sansa.practica.springboot.app.springboot_project_educademy.services.ProfesorService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/profesores")
@@ -50,17 +55,28 @@ public class ProfesorController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody ProfesorRequestDTO profesorDTO) {
-        Profesor profesor = converToEntity(profesorDTO);
-        Optional<Profesor> saved = service.saveIfNotExists(profesor);
-        if (saved.isPresent()) {
-            ProfesorResponseDTO response = convertToResponsDTO(saved.get());
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe un profesor con esos datos");
-        }
+    // @PostMapping
+    // public ResponseEntity<?> create(@RequestBody ProfesorRequestDTO profesorDTO)
+    // {
+    // Profesor profesor = converToEntity(profesorDTO);
+    // Optional<Profesor> saved = service.saveIfNotExists(profesor);
+    // if (saved.isPresent()) {
+    // ProfesorResponseDTO response = convertToResponsDTO(saved.get());
+    // return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    // } else {
+    // return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe un profesor
+    // con esos datos");
+    // }
 
+    // }
+
+    @PostMapping
+    public ResponseEntity<?> create(@Valid @RequestBody ProfesorRequestDTO profesorDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            return validation(result);
+        }
+        Profesor profesor = this.converToEntity(profesorDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(profesor));
     }
 
     @PutMapping("/{id}")
@@ -70,7 +86,7 @@ public class ProfesorController {
         if (updated.isPresent()) {
             ProfesorResponseDTO response = convertToResponsDTO(updated.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } 
+        }
         return ResponseEntity.notFound().build();
 
     }
@@ -124,5 +140,15 @@ public class ProfesorController {
                 p.getProfesorId(),
                 p.getFechaIngreso());
     }
+    // Metodo que controla la validacion
 
+    private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>(); // map<nombre del atributo, mensaje de error>
+
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo: " + err.getField() + " " + err.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+    }
 }

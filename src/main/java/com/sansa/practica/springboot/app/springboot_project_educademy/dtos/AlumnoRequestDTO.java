@@ -2,9 +2,9 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.dtos;
 
 import java.util.Date;
 
-import com.sansa.practica.springboot.app.springboot_project_educademy.validation.isExistDniDb;
-import com.sansa.practica.springboot.app.springboot_project_educademy.validation.isExistEmailDB;
-import com.sansa.practica.springboot.app.springboot_project_educademy.validation.isExistStudentIdDB;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.Alumno.isExistDniDb;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.Alumno.isExistEmailDB;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.Alumno.isExistStudentIdDB;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
