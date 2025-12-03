@@ -13,6 +13,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
@@ -23,9 +26,17 @@ public class User {
     private Long id;
 
     @Column(unique = true)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 4, max = 10)
     private String username;
     
     @Column(unique = true)
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
+    @Pattern(
+        regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
+        message = "La contraseña debe contener al menos: 1 número, 1 letra minúscula, 1 letra mayúscula, 1 carácter especial (@#$%^&+=!) y no debe contener espacios"
+    )  
     private String password;
     
     private boolean enabled;
