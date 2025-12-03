@@ -3,10 +3,12 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.User;
+import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.RoleRepository;
 import com.sansa.practica.springboot.app.springboot_project_educademy.repositories.UserRepository;
 
 
@@ -15,6 +17,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private RoleRepository roleRepository; //Para poder traer el role con el nombre
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
