@@ -31,13 +31,22 @@ public class UserController {
         return service.findAll();
     }
 
+    //Este metodo se va a utilizar para crear todo tipo de usuarios
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult result) {
+        user.setAdmin(false);
+        return this.create(user, result);
+    }
+
+    //Este metodo se utiliza solo para crear admins
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
+    private ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
+
 
     // ------ Validacion -------
     private ResponseEntity<?> validation(BindingResult result) {

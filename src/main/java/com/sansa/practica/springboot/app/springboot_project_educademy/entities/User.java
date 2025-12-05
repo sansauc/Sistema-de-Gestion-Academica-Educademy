@@ -32,29 +32,27 @@ public class User {
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 4, max = 10)
     private String username;
-    
+
     @Column(unique = true)
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
-    @Pattern(
-        regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[.@#$%^&+=!])(?=\\S+$).{8,}$",
-        message = "La contraseña debe contener al menos: 1 número, 1 letra minúscula, 1 letra mayúscula, 1 carácter especial (@#$%^&+=!) y no debe contener espacios"
-    )  
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) //Para que no devuelva la clave en el json, para no usar un dto
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[.@#$%^&+=!])(?=\\S+$).{8,}$", message = "La contraseña debe contener al menos: 1 número, 1 letra minúscula, 1 letra mayúscula, 1 carácter especial (@#$%^&+=!) y no debe contener espacios")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Para que no devuelva la clave en el json, para no usar un
+                                                           // dto
     private String password;
-    
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Para que no devuelva la clave en el json, para no usar un
+                                                           // dto
     private boolean enabled;
 
-    @Transient //es un atributo de la clase, no esta mapeado en la base de datos
-    private boolean isAdmin;
+   
+    @Transient // es un atributo de la clase, no esta mapeado en la base de datos
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Para que no devuelva la clave en el json, para no usar un dto
+    private boolean admin;
 
     @ManyToMany
-    @JoinTable(
-        name = "users_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"),
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","role_id"})}
-    )
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
+            @UniqueConstraint(columnNames = { "user_id", "role_id" }) })
     private List<Role> roles;
 
     public User() {
@@ -108,11 +106,11 @@ public class User {
     }
 
     public boolean isAdmin() {
-        return isAdmin;
+        return admin;
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public List<Role> getRoles() {
@@ -121,10 +119,10 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }    
+    }
 
     @PrePersist
     public void habilitarUsuario() {
         this.enabled = true;
-    }    
+    }
 }
