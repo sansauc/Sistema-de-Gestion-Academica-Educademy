@@ -16,7 +16,7 @@ public class isExistUsernameDbValidation implements ConstraintValidator<isExistU
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return !service.isExistUsernameDb(value);
+        return !service.existsByUsername(value);
     }
 
 }

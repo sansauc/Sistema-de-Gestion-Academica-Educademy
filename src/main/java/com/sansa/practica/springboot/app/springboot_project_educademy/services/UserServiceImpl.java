@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean isExistUsernameDb(String username) {
-        return repository.isExistUsernameDb(username);
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
     }
 
 }
