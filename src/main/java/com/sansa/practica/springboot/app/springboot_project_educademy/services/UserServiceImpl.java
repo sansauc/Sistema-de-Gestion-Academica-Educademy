@@ -52,4 +52,10 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isExistUsernameDb(String username) {
+        return repository.isExistUsernameDb(username);
+    }
+
 }

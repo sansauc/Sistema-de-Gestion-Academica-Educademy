@@ -3,6 +3,7 @@ package com.sansa.practica.springboot.app.springboot_project_educademy.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sansa.practica.springboot.app.springboot_project_educademy.validation.User.isExistUsernameDb;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @isExistUsernameDb
     @Column(unique = true)
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 4, max = 10)
