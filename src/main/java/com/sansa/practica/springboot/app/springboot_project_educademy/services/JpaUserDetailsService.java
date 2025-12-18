@@ -46,4 +46,5 @@ public class JpaUserDetailsService implements UserDetailsService {
                 authorities);
     }
 
+    //Quedamos en 1:40:00
 }
