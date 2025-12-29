@@ -20,9 +20,9 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests((authz) -> authz
-        .requestMatchers( HttpMethod.GET, "/api/users").permitAll()
-        .requestMatchers( HttpMethod.POST, "/api/users/register").permitAll()
-        .anyRequest().authenticated())
+                .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
+                .anyRequest().authenticated())
                 .csrf(config -> config.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
