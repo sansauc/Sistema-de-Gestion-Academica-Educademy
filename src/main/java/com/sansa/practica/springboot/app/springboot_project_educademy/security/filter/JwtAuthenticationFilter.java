@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.crypto.SecretKey;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,11 +28,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import static com.sansa.practica.springboot.app.springboot_project_educademy.security.TokenJWTConfig.*;
 
 //Este filtro se utiliza para authenticar y validar el token
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager){
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -42,65 +40,80 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-                User user = null;
-                String username = null;
-                String password = null;
+        User user = null;
+        String username = null;
+        String password = null;
 
-                try {
-                    user = new ObjectMapper().readValue(request.getInputStream(), User.class); //Capturamos el json y lo hacemos tipo User (de nuestro package entities)
-                    username=user.getUsername();
-                    password = user.getPassword();
-                } catch (StreamReadException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (DatabindException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+        try {
+            user = new ObjectMapper().readValue(request.getInputStream(), User.class); // Capturamos el json y lo
+                                                                                       // hacemos tipo User (de nuestro
+                                                                                       // package entities)
+            username = user.getUsername();
+            password = user.getPassword();
+        } catch (StreamReadException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (DatabindException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+                password);
 
-                return authenticationManager.authenticate(authenticationToken);
+        return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-     
-                User user = (User)authResult.getPrincipal();
-                String username = user.getUsername();
-                Collection <? extends GrantedAuthority> roles = authResult.getAuthorities();
-                
-                Claims claims = Jwts.claims().build();
-                claims.put("authorities", roles);
 
-                String token = Jwts.builder()
-                    .subject(username)
-                    .claims(claims)
-                    .expiration(new Date(System.currentTimeMillis() + 3600000)) //Esto corresponde a la fecha actual + hora, esta en milisegundos
-                    .issuedAt(new Date()) //fecha en la que se genera el token
-                    .signWith(SECRET_KEY)
-                    .compact(); //Esto genera el token
+        User user = (User) authResult.getPrincipal();
+        String username = user.getUsername();
+        Collection<? extends GrantedAuthority> roles = authResult.getAuthorities();
 
-                response.addHeader(HEADER_AUTHORIZATION,PREFIT_TOKEN + token);
+        Claims claims = Jwts.claims().build();
+        claims.put("authorities", roles);
 
-                Map<String, String> body = new HashMap<>();
-                body.put("token", token);
-                body.put("username", username);
-                body.put("message", "Hola " + username + " has iniciado sesión con exito");
+        String token = Jwts.builder()
+                .subject(username)
+                .claims(claims)
+                .expiration(new Date(System.currentTimeMillis() + 3600000)) // Esto corresponde a la fecha actual +
+                                                                            // hora, esta en milisegundos
+                .issuedAt(new Date()) // fecha en la que se genera el token
+                .signWith(SECRET_KEY)
+                .compact(); // Esto genera el token
 
-                response.getWriter().write(new ObjectMapper().writeValueAsString(body)); //generamos el json 
-                response.setContentType(CONTENT_TYPE);
-                response.setStatus(200);
+        response.addHeader(HEADER_AUTHORIZATION, PREFIT_TOKEN + token);
 
-        
+        Map<String, String> body = new HashMap<>();
+        body.put("token", token);
+        body.put("username", username);
+        body.put("message", "Hola " + username + " has iniciado sesión con exito");
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(body)); // generamos el json
+        response.setContentType(CONTENT_TYPE);
+        response.setStatus(200);
+
     }
-//Quedamos en 2:01:00
 
-    
-    
-    
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException failed) throws IOException, ServletException {
+
+        Map<String, String> body = new HashMap<>();
+        body.put("message", "Error en la autenticación!! username o password incorrectos!");
+        body.put("error", failed.getMessage());
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+        response.setStatus(401);
+        response.setContentType(CONTENT_TYPE);
+
+    }
+
+    // Quedamos en 2:01:00
+
 }
