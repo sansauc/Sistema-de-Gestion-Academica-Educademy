@@ -36,7 +36,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users/register").permitAll()
                 .anyRequest().authenticated())
-                .addFilter(new JwtAuthenticationFilter(this.authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .csrf(config -> config.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();

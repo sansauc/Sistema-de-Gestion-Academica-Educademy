@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 import com.sansa.practica.springboot.app.springboot_project_educademy.entities.User;
-import java.util.List;
 
 
 public interface UserRepository extends CrudRepository <User, Long> {
