@@ -114,6 +114,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     }
 
-    // Quedamos en 2:01:00
+    // Quedamos en 2:12:00
 
 }
